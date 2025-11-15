@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "p16-oec-sg.ibyteimg.com",
       },
+      {
+        protocol: "https",
+        hostname: "p16-oec-va.ibyteimg.com",
+      },
     ],
   },
 

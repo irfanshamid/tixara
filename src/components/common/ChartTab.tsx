@@ -4,10 +4,27 @@ import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 
-const ChartTab: React.FC = () => {
+interface ChartTabProps {
+  selectedRoom: string;
+  onSelectRoom: (roomId: string) => void;
+  onFilterChange: (filter: {
+    type: "today" | "last3day" | "monthly" | "range";
+    start: Date | null;
+    end: Date | null;
+  }) => void;
+}
+
+const ChartTab: React.FC<ChartTabProps> = ({
+  selectedRoom,
+  onSelectRoom,
+  onFilterChange,
+}) => {
   const [selected, setSelected] = useState<
     "optionOne" | "optionTwo" | "optionThree" | "optionFour"
   >("optionOne");
+
+  const [rangeStart, setRangeStart] = useState<string>("");
+  const [rangeEnd, setRangeEnd] = useState<string>("");
 
   const getButtonClass = (option: "optionOne" | "optionTwo" | "optionThree" | "optionFour") =>
     selected === option
@@ -15,25 +32,89 @@ const ChartTab: React.FC = () => {
       : "text-gray-500 dark:text-gray-400";
 
   const roomList = [
-    {id: 1, name: 'kktops'},
-    {id: 2, name: 'kktop.dailyfit'},
-    {id: 3, name: 'kktop.official'},
-  ]
+    { id: '7571036699610893067', name: "kktops" },
+    { id: '7572438844390968076', name: "kktop.dailyfit" },
+    { id: '7572472780560157451', name: "kktop.official" },
+  ];
 
   const [isOpen, setIsOpen] = useState(false);
-  const selectedItem = (idx: number) => {
-    // setRoom(idx);
-    console.log(idx);
+
+  const handleSelectRoom = (roomId: string) => {
+    onSelectRoom(roomId);
     setIsOpen(false);
-  }
+  };
+
+  // -----------------------------
+  // FILTER HANDLERS
+  // -----------------------------
+
+  const applyToday = () => {
+    const today = new Date();
+    onFilterChange({
+      type: "today",
+      start: today,
+      end: today,
+    });
+  };
+
+  const applyLast3Day = () => {
+    const today = new Date();
+    const past = new Date();
+    past.setDate(today.getDate() - 2);
+
+    onFilterChange({
+      type: "last3day",
+      start: past,
+      end: today,
+    });
+  };
+
+  const applyMonthly = () => {
+    const now = new Date();
+
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    onFilterChange({
+      type: "monthly",
+      start,
+      end,
+    });
+  };
+
+  const applyRange = (startStr: string, endStr: string) => {
+    if (!startStr || !endStr) return;
+
+    onFilterChange({
+      type: "range",
+      start: new Date(startStr),
+      end: new Date(endStr),
+    });
+  };
+
+  // -----------------------------
+  // ON TAB CHANGE
+  // -----------------------------
+  const handleSelectTab = (option: "optionOne" | "optionTwo" | "optionThree" | "optionFour") => {
+    setSelected(option);
+
+    if (option === "optionOne") applyToday();
+    if (option === "optionTwo") applyLast3Day();
+    if (option === "optionThree") applyMonthly();
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 relative">
+      {/* SELECT ROOM */}
       <button
-        onClick={() => setIsOpen(!isOpen)} 
+        onClick={() => setIsOpen(!isOpen)}
         className="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white flex items-center justify-between dropdown-toggle shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800"
       >
-        <span className="block mr-1 font-medium text-theme-sm">Select store</span>
+        <span>
+          {selectedRoom
+            ? roomList.find((r) => r.id === selectedRoom)?.name
+            : "Select store"}
+        </span>
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
@@ -43,7 +124,6 @@ const ChartTab: React.FC = () => {
           height="20"
           viewBox="0 0 18 20"
           fill="none"
-          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
@@ -54,16 +134,17 @@ const ChartTab: React.FC = () => {
           />
         </svg>
       </button>
+
       <Dropdown
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         className="absolute left-0 top-8 flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
       >
         <ul className="flex flex-col gap-1">
-          {roomList.map((item, key) => (
-            <li key={key}>
+          {roomList.map((item) => (
+            <li key={item.id}>
               <DropdownItem
-                onItemClick={() => selectedItem(item.id)}
+                onItemClick={() => handleSelectRoom(item.id)}
                 className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 {item.name}
@@ -72,55 +153,70 @@ const ChartTab: React.FC = () => {
           ))}
         </ul>
       </Dropdown>
+
       <div></div>
 
+      {/* FILTER TABS */}
       <div className="col-span-4 md:col-span-2">
         <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
           <button
-            onClick={() => setSelected("optionOne")}
-            className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900   dark:hover:text-white ${getButtonClass(
+            onClick={() => handleSelectTab("optionOne")}
+            className={`px-3 py-2 w-full rounded-md ${getButtonClass(
               "optionOne"
             )}`}
           >
             Today
           </button>
           <button
-            onClick={() => setSelected("optionTwo")}
-            className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900   dark:hover:text-white ${getButtonClass(
+            onClick={() => handleSelectTab("optionTwo")}
+            className={`px-3 py-2 w-full rounded-md ${getButtonClass(
               "optionTwo"
             )}`}
           >
             Last 3 Day
           </button>
           <button
-            onClick={() => setSelected("optionThree")}
-            className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900   dark:hover:text-white ${getButtonClass(
+            onClick={() => handleSelectTab("optionThree")}
+            className={`px-3 py-2 w-full rounded-md ${getButtonClass(
               "optionThree"
             )}`}
           >
             Monthly
           </button>
           <button
-            onClick={() => setSelected("optionFour")}
-            className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900   dark:hover:text-white ${getButtonClass(
+            onClick={() => handleSelectTab("optionFour")}
+            className={`px-3 py-2 w-full rounded-md ${getButtonClass(
               "optionFour"
             )}`}
           >
             Range Date
           </button>
         </div>
-        <div className={selected === 'optionFour' ? 'flex gap-2 items-center mt-3' : 'hidden'}>
-          <div className="text-gray-500">Select your range: </div>
-          <input
-            type="date"
-            className="dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-          />
-          <div className="text-gray-500">-</div>
-          <input
-            type="date"
-            className="dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-          />
-        </div>
+
+        {/* RANGE DATE */}
+        {selected === "optionFour" && (
+          <div className="flex gap-2 items-center mt-3">
+            <input
+              type="date"
+              value={rangeStart}
+              onChange={(e) => {
+                setRangeStart(e.target.value);
+                applyRange(e.target.value, rangeEnd);
+              }}
+              className="h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 px-4 text-sm text-gray-800 dark:text-white dark:bg-gray-900"
+            />
+            <span className="text-gray-500">-</span>
+            <input
+              type="date"
+              value={rangeEnd}
+              onChange={(e) => {
+                setRangeEnd(e.target.value);
+                applyRange(rangeStart, e.target.value);
+              }}
+              className="h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 px-4 text-sm text-gray-800 dark:text-white dark:bg-gray-900"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

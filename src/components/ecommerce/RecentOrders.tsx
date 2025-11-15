@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { formatCurrency } from "@/utils/helper";
 import {
   Table,
@@ -9,52 +10,40 @@ import {
   TableRow,
 } from "../ui/table";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { ProductList } from "@/types/affiliate";
 
-// Define the TypeScript interface for the table rows
-interface Product {
-  id: number;
-  image: string;
-  name: string;
-  direct_gmv: number;
-  impressions: number;
-  click_rate: number;
-  item_sold: number;
-  product_click: number;
-  add_to_cart: number;
-}
-
-// Define the table data using the interface
-const tableData: Product[] = [
-  {
-    id: 12312314123532323,
-    image: "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/b41d3144eff34313b5221017753bfb44~tplv-aphluv4xwc-resize-jpeg:800:800.jpeg?dr=15584&t=555f072d&ps=933b5bde&shp=2408c917&shcp=d01f3899&idc=maliva&from=604555543",
-    name: "KKTOP Jaket Airism Hoodie Anti UV Wanita Outdoor Olahraga UPF",
-    direct_gmv: 290003123,
-    impressions: 3121231,
-    click_rate: 2.23,
-    item_sold: 312,
-    product_click: 3245,
-    add_to_cart: 983,
-  },
-];
-
-
-export default function RecentOrders() {
-  const [data, setData] = useState([]);
+export default function EcommerceMetrics({
+  roomId,
+  dateFilter,
+}: {
+  roomId: string;
+  dateFilter: {
+    type: string;
+    start: Date | null;
+    end: Date | null;
+  };
+}) {
+  const [data, setData] = useState<ProductList>();
 
   useEffect(() => {
-    async function loadData() {
-      const res = await fetch("/api/product");
-      const json = await res.json();
-      console.log("DATA PRODUCT", json);
-      setData(json);
-    }
+    if (!roomId) return;
 
-    loadData();
-  }, []);
+    fetch(`/api/product?room_id=${roomId}&start=${dateFilter.start}&end=${dateFilter.end}`)
+      .then(res => res.json())
+      .then((data: ProductList[]) => {
+        generateList(data);
+        console.log(data);
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+      });
+  }, [roomId, dateFilter]);
 
-  console.log(data);
+  const generateList = (list: ProductList[]) => {
+    console.log(list);
+    setData(list[0]);
+  }
+
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
@@ -109,7 +98,7 @@ export default function RecentOrders() {
           </button>
         </div>
       </div>
-      <div className="max-w-full overflow-x-auto">
+      <div className="max-w-full overflow-x-auto max-h-[700px] overflow-y-auto">
         <Table>
           {/* Table Header */}
           <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
@@ -162,22 +151,25 @@ export default function RecentOrders() {
           {/* Table Body */}
 
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-            {tableData.map((product) => (
-              <TableRow key={product.id} className="">
-                <TableCell className="py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-[50px] w-[50px] overflow-hidden rounded-md">
-                      <Image
-                        width={50}
-                        height={50}
-                        src={product.image}
-                        className="h-[50px] w-[50px]"
-                        alt={product.name}
-                      />
-                    </div>
+            {data?.stats.data.segments[0].stats.map((product, key) => (
+              <TableRow key={key} className="">
+                <TableCell className="py-3 max-w-[300px]">
+                  <div className="flex items-center gap-3 pr-10">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={product.cover_url}
+                      className="h-[50px] w-[50px] object-cover rounded"
+                      alt={product.name}
+                    />
                     <div>
-                      <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                        {product.name}
+                      <p
+                        className="font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                        title={product.name}
+                      >
+                        {product.name.length > 70
+                          ? product.name.slice(0, 70) + "..."
+                          : product.name}
                       </p>
                       <span className="text-gray-500 text-theme-xs dark:text-gray-400">
                         ID : {product.id}
@@ -185,23 +177,24 @@ export default function RecentOrders() {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  Rp{formatCurrency(product.direct_gmv)}
+
+                <TableCell className="py-3 min-w-[100px] text-gray-500 text-theme-sm dark:text-gray-400">
+                  Rp{formatCurrency(Number(product.direct_gmv_local.amount))}
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {formatCurrency(product.impressions)}
+                <TableCell className="py-3 min-w-[100px] text-gray-500 text-theme-sm dark:text-gray-400">
+                  {formatCurrency(product.exposure_cnt)}
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.click_rate}%
+                <TableCell className="py-3 min-w-[100px] text-gray-500 text-theme-sm dark:text-gray-400">
+                  {product.click_through_rate}%
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {formatCurrency(product.item_sold)}
+                <TableCell className="py-3 min-w-[100px] text-gray-500 text-theme-sm dark:text-gray-400">
+                  {formatCurrency(product.direct_sales)}
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {formatCurrency(product.product_click)}
+                <TableCell className="py-3 min-w-[100px] text-gray-500 text-theme-sm dark:text-gray-400">
+                  {formatCurrency(product.total_click_cnt)}
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {formatCurrency(product.add_to_cart)}
+                <TableCell className="py-3 min-w-[100px] text-gray-500 text-theme-sm dark:text-gray-400">
+                  {formatCurrency(product.add_shop_cart_cnt)}
                 </TableCell>
               </TableRow>
             ))}
