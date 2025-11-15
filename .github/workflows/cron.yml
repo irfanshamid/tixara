@@ -1,8 +1,8 @@
-name: Cron Every 2 Minutes
+name: Cron Every 30 Minutes
 
 on:
   schedule:
-    - cron: "*/2 * * * *"
+    - cron: "*/30 * * * *"
 
 jobs:
   ping:
