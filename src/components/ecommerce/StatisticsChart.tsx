@@ -2,7 +2,6 @@
 import React from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import ChartTab from "../common/ChartTab";
 import dynamic from "next/dynamic";
 
 // Dynamically import the ReactApexChart component
@@ -129,9 +128,6 @@ export default function StatisticsChart() {
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
             Each data point on this chart is aggregated in 15-minute intervals.
           </p>
-        </div>
-        <div className="flex items-start w-full gap-3 sm:justify-end">
-          <ChartTab />
         </div>
       </div>
 
