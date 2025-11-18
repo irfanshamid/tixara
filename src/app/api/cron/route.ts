@@ -1,10 +1,8 @@
-export const runtime = "nodejs";
-export const preferredRegion = "auto";
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 
 const ROOM_IDS = [
   "7572438844390968076",
