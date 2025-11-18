@@ -9,7 +9,7 @@ import StatisticsChart from "./StatisticsChart";
 import RecentOrders from "./RecentOrders";
 
 export default function DashboardLive() {
-  const [roomId, setRoomId] = useState<string>('');
+  const [roomId, setRoomId] = useState<string>('7571036699610893067');
 
   // filter: today, last3day, monthly, range
   const [dateFilter, setDateFilter] = useState<{

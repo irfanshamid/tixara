@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
 import React from "react";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
+// import RecentOrders from "@/components/ecommerce/RecentOrders";
 
 export const metadata: Metadata = {
   title:
@@ -16,7 +16,7 @@ export default function Products() {
         <EcommerceMetrics />
       </div>
       <div className="col-span-12 xl:col-span-12">
-        <RecentOrders />
+        {/* <RecentOrders /> */}
       </div>
     </div>
   );
