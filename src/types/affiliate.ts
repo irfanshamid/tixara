@@ -5,6 +5,16 @@ export interface ProductList {
   stats: Stats;
 }
 
+export interface ProductListFind {
+  id?: string;
+  roomId?: string;
+  syncTime?: {
+    gte: Date;
+    lte: Date;
+  }
+  stats?: Stats;
+}
+
 export interface Stats {
   code: number;
   data: StatsData;
