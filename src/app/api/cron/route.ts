@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
@@ -11,8 +12,6 @@ const ROOM_IDS = [
 
 export async function GET() {
   try {
-    const { prisma } = await import("@/lib/prisma");
-    
     for (const roomId of ROOM_IDS) {
       const payload = {
         request: {
