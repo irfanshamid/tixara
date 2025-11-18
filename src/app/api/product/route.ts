@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { ProductListFind } from "@/types/affiliate";
+import { PrismaClient, Prisma } from "@/generated/prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +11,7 @@ export async function GET(request: Request) {
   const end = searchParams.get("end_date");
 
   // Build dynamic where object safely
-  const where: ProductListFind = {};
+  const where: Prisma.ProductStatsWhereInput = {};
 
   if (roomId) {
     where.roomId = roomId;
@@ -30,6 +29,7 @@ export async function GET(request: Request) {
     take: 20,
     orderBy: { syncTime: "desc" },
   });
+
 
   return NextResponse.json(data);
 }
