@@ -14,12 +14,12 @@ export default function DashboardLive() {
   // filter: today, last3day, monthly, range
   const [dateFilter, setDateFilter] = useState<{
     type: "today" | "last3day" | "monthly" | "range";
-    start: Date | null;
-    end: Date | null;
+    start: number | null;
+    end: number | null;
   }>({
     type: "today",
-    start: new Date(),
-    end: new Date(),
+    start: Date.now(),
+    end: Date.now(),
   });
 
   return (
@@ -40,7 +40,7 @@ export default function DashboardLive() {
       </div>
 
       <div className="col-span-12 xl:col-span-6">
-        <DailyStat />
+        <DailyStat roomId={roomId} dateFilter={dateFilter}/>
       </div>
 
       <div className="col-span-12">

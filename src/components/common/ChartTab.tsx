@@ -9,8 +9,8 @@ interface ChartTabProps {
   onSelectRoom: (roomId: string) => void;
   onFilterChange: (filter: {
     type: "today" | "last3day" | "monthly" | "range";
-    start: Date | null;
-    end: Date | null;
+    start: number | null;
+    end: number | null;
   }) => void;
 }
 
@@ -49,7 +49,7 @@ const ChartTab: React.FC<ChartTabProps> = ({
   // -----------------------------
 
   const applyToday = () => {
-    const today = new Date();
+    const today = Date.now();
     onFilterChange({
       type: "today",
       start: today,
@@ -59,38 +59,51 @@ const ChartTab: React.FC<ChartTabProps> = ({
 
   const applyLast3Day = () => {
     const today = new Date();
+    today.setHours(23, 59, 59, 999); // end of today
+
     const past = new Date();
     past.setDate(today.getDate() - 2);
+    past.setHours(0, 0, 0, 0); // start of that day
 
     onFilterChange({
       type: "last3day",
-      start: past,
-      end: today,
+      start: past.getTime(),  // → timestamp in ms
+      end: today.getTime(),
     });
   };
 
   const applyMonthly = () => {
     const now = new Date();
 
-    const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const start = new Date(now.getFullYear(), now.getMonth(), 1); // 1st day 00:00:00
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // last day 23:59:59
+    end.setHours(23, 59, 59, 999);
 
     onFilterChange({
       type: "monthly",
-      start,
-      end,
+      start: start.getTime(), // timestamp
+      end: end.getTime(),     // timestamp
     });
   };
 
   const applyRange = (startStr: string, endStr: string) => {
     if (!startStr || !endStr) return;
 
+    const start = new Date(startStr);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(endStr);
+    end.setHours(23, 59, 59, 999);
+
     onFilterChange({
       type: "range",
-      start: new Date(startStr),
-      end: new Date(endStr),
+      start: start.getTime(),
+      end: end.getTime(),
     });
   };
+
 
   // -----------------------------
   // ON TAB CHANGE

@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const startStr = searchParams.get("start_date");
   const endStr = searchParams.get("end_date");
 
-  const where: Prisma.ProductStatsWhereInput = {};
+  const where: Prisma.SalesStatsWhereInput = {};
 
   if (roomId) {
     where.roomId = roomId;
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
     }
   }
 
-  const data = await prisma.productStats.findMany({
+  const data = await prisma.salesStats.findMany({
     where,
     orderBy: { syncTime: "desc" },
   });

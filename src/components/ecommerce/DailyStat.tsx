@@ -1,8 +1,66 @@
 "use client";
 
+import { ProductList } from "@/types/affiliate";
 import { formatCurrency } from "@/utils/helper";
+import { useEffect, useState } from "react";
 
-export default function DailyStat() {
+export default function DailyStat({
+  roomId,
+  dateFilter,
+}: {
+  roomId: string;
+  dateFilter: {
+    type: string;
+    start: number | null;
+    end: number | null;
+  };
+}) {
+
+    const [data, setData] = useState<ProductList>();
+
+    useEffect(() => {
+    if (!roomId) return;
+
+    fetch(`/api/sales?room_id=${roomId}&start_date=${dateFilter.start}&end_date=${dateFilter.end}`)
+        .then(res => res.json())
+        .then((data: ProductList[]) => {
+            getLatestSyncPerDay(data);
+            console.log(data);
+        })
+        .catch(err => {
+            console.error('Fetch error:', err);
+        });
+    }, [roomId, dateFilter]);
+
+    const generateList = (list: ProductList[]) => {
+            console.log(list);
+        setData(list[0]);
+    }
+
+    function getLatestSyncPerDay(data: ProductList[]) {
+        // Map untuk menampung {roomId|date → object dengan syncTime terbesar}
+        const map = new Map();
+
+        data.forEach(item => {
+            const date = item.syncTime.split("T")[0]; // ambil YYYY-MM-DD
+            const key = `${item.roomId}-${date}`;
+
+            if (!map.has(key)) {
+                map.set(key, item);
+            } else {
+                const existing = map.get(key);
+
+                // bandingkan syncTime, ambil yang terbesar
+                if (new Date(item.syncTime) > new Date(existing.syncTime)) {
+                    map.set(key, item);
+                }
+            }
+        });
+
+        return generateList(Array.from(map.values()));
+    }
+
+    console.log(data);
 
     const statistic = [
         { title: "Impressions", value: 1020000 },          // 1.02M
