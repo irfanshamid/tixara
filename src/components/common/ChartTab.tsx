@@ -32,9 +32,9 @@ const ChartTab: React.FC<ChartTabProps> = ({
       : "text-gray-500 dark:text-gray-400";
 
   const roomList = [
-    { id: '7200582230367388673', name: "kktops" },
-    { id: '7325274364953150471', name: "kktop.dailyfit" },
-    { id: '7324160940587828232', name: "kktop.official" },
+    { id: '7573979822407027468', name: "kktops" },
+    { id: '7574299200704252684', name: "kktop.dailyfit" },
+    { id: '7574244333054987020', name: "kktop.official" },
   ];
 
   const [isOpen, setIsOpen] = useState(false);

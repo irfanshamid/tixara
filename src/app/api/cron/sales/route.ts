@@ -5,9 +5,9 @@ export const revalidate = 0;
 export const runtime = "nodejs";
 
 const ROOM_IDS = [
-  "7200582230367388673",
-  "7325274364953150471",
-  "7324160940587828232",
+  "7573979822407027468",
+  "7574299200704252684",
+  "7574244333054987020",
 ];
 
 export async function GET() {
