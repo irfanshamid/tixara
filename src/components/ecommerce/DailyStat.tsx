@@ -2,6 +2,7 @@
 
 import { ProductList } from "@/types/affiliate";
 import { formatCurrency } from "@/utils/helper";
+import { mergeProductStats } from "@/utils/merge";
 import { useEffect, useState } from "react";
 
 export default function DailyStat({
@@ -36,8 +37,9 @@ export default function DailyStat({
     }, [roomId, dateFilter]);
 
     const generateList = (list: ProductList[]) => {
-        console.log(list);
-        setData(list[0]);
+        console.log('per day', list);
+        const data = mergeProductStats(list);
+        setData(data);
     }
 
     function getLatestSyncPerDay(data: ProductList[]) {
