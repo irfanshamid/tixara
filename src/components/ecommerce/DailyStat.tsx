@@ -15,10 +15,11 @@ export default function DailyStat({
     end: number | null;
   };
 }) {
-
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState<ProductList>();
 
     useEffect(() => {
+    setLoading(true);
     if (!roomId) return;
 
     fetch(`/api/sales?room_id=${roomId}&start_date=${dateFilter.start}&end_date=${dateFilter.end}`)
@@ -26,14 +27,16 @@ export default function DailyStat({
         .then((data: ProductList[]) => {
             getLatestSyncPerDay(data);
             console.log(data);
+            setLoading(false);
         })
         .catch(err => {
             console.error('Fetch error:', err);
+            setLoading(false);
         });
     }, [roomId, dateFilter]);
 
     const generateList = (list: ProductList[]) => {
-            console.log(list);
+        console.log(list);
         setData(list[0]);
     }
 
@@ -60,43 +63,47 @@ export default function DailyStat({
         return generateList(Array.from(map.values()));
     }
 
-    console.log(data);
-
     const statistic = [
-        { title: "Impressions", value: 1020000 },          // 1.02M
-        { title: "Views", value: 56220 },                  // 56.22K
-        { title: "GMV per hour", value: 628080 },          // 628.08K
-        { title: "Impressions per hour", value: 10650 },   // 10.65K
+        { title: "Impressions", value: formatCurrency(data?.stats.data.stats.client_show_cnt || 0) },          // 1.02M
+        { title: "Views", value: formatCurrency(data?.stats.data.stats.watch_pv || 0) },                  // 56.22K
+        { title: "GMV per hour", value: data?.stats.data.stats.direct_gmv_local_per_hour.amount_delimited || 0},          // 628.08K
+        { title: "Impressions per hour", value: formatCurrency(data?.stats.data.stats.show_pv_per_hour || 0) },   // 10.65K
 
-        { title: "Show GPM", value: 58980 },               // 58.98K
-        { title: "Avg. viewing duration per view", value: 30, suffix: "s" },  // 30s
-        { title: "Enter room rate (via LIVE page)", value: 2.82, suffix: "%" },
-        { title: "Enter room rate", value: 5.5, suffix: "%" },               // + dynamic indicator
-        { title: "Enter room rate change", value: -36.13, suffix: "%" },
+        { title: "Show GPM", value: data?.stats.data.stats.live_show_gpm_local.amount_delimited || 0 },               // 58.98K
+        { title: "Avg. viewing duration per view", value: Number(data?.stats.data.stats.avg_view_duration || 0 ).toFixed(2), suffix: "s" },  // 30s
+        { title: "Enter room rate (via LIVE page)", value: (Number(data?.stats.data.stats.enter_room_rate_live_preview) * 100 || 0 ).toFixed(2), suffix: "%" },
+        { title: "Enter room rate", value: (Number(data?.stats.data.stats.enter_room_rate) * 100 || 0 ).toFixed(2), suffix: "%" },
 
-        { title: "Click-Through Rate", value: 26.31, suffix: "%" },
-        { title: "Order rate (SKU orders)", value: 0.73, suffix: "%" },
-        { title: "> 1 min. views", value: 3650 },           // 3.65K
-        { title: "Product Impressions", value: 380280 },    // 380.28K
+        { title: "Click-Through Rate", value: (Number(data?.stats.data.stats.click_through_rate) * 100 || 0 ).toFixed(2), suffix: "%" },
+        { title: "Order rate (SKU orders)", value: (Number(data?.stats.data.stats.sku_order_rate) * 100 || 0 ).toFixed(2), suffix: "%" },
+        { title: "> 1 min. views", value: formatCurrency(data?.stats.data.stats.watch_uv || 0) },           // 3.65K
+        { title: "Product Impressions", value: formatCurrency(data?.stats.data.stats.product_view_cnt || 0) },    // 380.28K
 
-        { title: "Watch GPM", value: 1070000 },             // 1.07M
-        { title: "Avg. viewing duration", value: 42, suffix: "s" },
-        { title: "Product clicks", value: 14790 },          // 14.79K
-        { title: "Product click rate", value: 3.89, suffix: "%" }
+        { title: "Watch GPM", value: data?.stats.data.stats.watch_gpm_local.amount_delimited || 0 },             // 1.07M
+        { title: "Avg. viewing duration", value: data?.stats.data.stats.avg_watching_time || 0, suffix: "s" },
+        { title: "Product clicks", value: formatCurrency(data?.stats.data.stats.product_reach_cnt || 0) },          // 14.79K
+        { title: "Product click rate", value: (Number(data?.stats.data.stats.product_click_rate) * 100 || 0 ).toFixed(2), suffix: "%"  }
     ];
 
     return (
         <div className="rounded-2xl border border-gray-200 bg-gray-100 dark:border-gray-800 dark:bg-white/[0.03]">
-            <div className="grid grid-cols-1 md:grid-cols-4 items-center justify-center gap-5 px-6 py-3.5 sm:gap-8 sm:py-5">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-end justify-center gap-5 px-6 py-5 sm:gap-6 sm:py-3">
                 {statistic.map((item, key) => {
                     return (
-                        <div key={key}>
-                            <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
+                        <div key={key} className="py-2 md:py-4">
+                              <p
+                                className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm truncate"
+                                title={item.title}
+                            >
                                 {item.title}
                             </p>
-                            <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-                                {formatCurrency(item.value)} {item?.suffix}
-                            </p>
+                            {loading ? (
+                                <div className="animate-pulse h-5 bg-gray-300 rounded-full w-full"></div>
+                            ):(
+                                <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
+                                    {item.value} {item?.suffix}
+                                </p>
+                            )}
                         </div>
                     )
                 })}

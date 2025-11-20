@@ -2,14 +2,19 @@
 
 import React, { useState } from "react";
 import ChartTab from "@/components/common/ChartTab";
-import { EcommerceMetrics } from "./EcommerceMetrics";
 import MonthlySalesChart from "./MonthlySalesChart";
 import DailyStat from "./DailyStat";
 import StatisticsChart from "./StatisticsChart";
 import RecentOrders from "./RecentOrders";
+import EcommerceMetrics from "./EcommerceMetrics";
 
 export default function DashboardLive() {
   const [roomId, setRoomId] = useState<string>('7571036699610893067');
+  const now = new Date();
+  const start = new Date(now);
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(now);
+  end.setHours(23, 59, 59, 999);
 
   // filter: today, last3day, monthly, range
   const [dateFilter, setDateFilter] = useState<{
@@ -18,8 +23,8 @@ export default function DashboardLive() {
     end: number | null;
   }>({
     type: "today",
-    start: Date.now(),
-    end: Date.now(),
+    start: start.getTime(),
+    end: end.getTime(),
   });
 
   return (
@@ -33,9 +38,8 @@ export default function DashboardLive() {
         />
       </div>
 
-      {/* Semua chart bisa menerima roomId & dateFilter */}
       <div className="col-span-12 space-y-6 xl:col-span-6">
-        <EcommerceMetrics />
+        <EcommerceMetrics roomId={roomId} dateFilter={dateFilter}/>
         <MonthlySalesChart />
       </div>
 

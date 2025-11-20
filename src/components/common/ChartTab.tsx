@@ -49,11 +49,20 @@ const ChartTab: React.FC<ChartTabProps> = ({
   // -----------------------------
 
   const applyToday = () => {
-    const today = Date.now();
+    const now = new Date();
+
+    // Start of today (00:00:00.000)
+    const start = new Date(now);
+    start.setHours(0, 0, 0, 0);
+
+    // End of today (23:59:59.999)
+    const end = new Date(now);
+    end.setHours(23, 59, 59, 999);
+
     onFilterChange({
       type: "today",
-      start: today,
-      end: today,
+      start: start.getTime(), // timestamp
+      end: end.getTime(),     // timestamp
     });
   };
 
@@ -117,7 +126,7 @@ const ChartTab: React.FC<ChartTabProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 relative">
+    <div className="grid grid-cols-1 md:grid-cols-4 relative gap-6">
       {/* SELECT ROOM */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -167,8 +176,6 @@ const ChartTab: React.FC<ChartTabProps> = ({
         </ul>
       </Dropdown>
 
-      <div></div>
-
       {/* FILTER TABS */}
       <div className="col-span-4 md:col-span-2">
         <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
@@ -216,7 +223,7 @@ const ChartTab: React.FC<ChartTabProps> = ({
                 setRangeStart(e.target.value);
                 applyRange(e.target.value, rangeEnd);
               }}
-              className="h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 px-4 text-sm text-gray-800 dark:text-white dark:bg-gray-900"
+              className="h-11 w-1/2 rounded-lg border border-gray-200 bg-transparent py-2.5 px-4 text-sm text-gray-800 dark:text-white dark:bg-gray-900"
             />
             <span className="text-gray-500">-</span>
             <input
@@ -226,11 +233,20 @@ const ChartTab: React.FC<ChartTabProps> = ({
                 setRangeEnd(e.target.value);
                 applyRange(rangeStart, e.target.value);
               }}
-              className="h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 px-4 text-sm text-gray-800 dark:text-white dark:bg-gray-900"
+              className="h-11 w-1/2 rounded-lg border border-gray-200 bg-transparent py-2.5 px-4 text-sm text-gray-800 dark:text-white dark:bg-gray-900"
             />
           </div>
         )}
       </div>
+
+      <a
+        href="https://tailadmin.com/pricing"
+        target="_blank"
+        rel="nofollow"
+        className="flex items-center justify-center p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm hover:bg-brand-600"
+      >
+        Export Statistics
+      </a>
     </div>
   );
 };

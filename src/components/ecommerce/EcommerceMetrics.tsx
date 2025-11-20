@@ -1,10 +1,66 @@
 "use client";
-import React from "react";
-import Badge from "../ui/badge/Badge";
-import { ArrowDownIcon, ArrowUpIcon, BoxIconLine, GroupIcon } from "@/icons";
+import React, { useEffect, useState } from "react";
+import { BoxIconLine, GroupIcon } from "@/icons";
 import { formatCurrency } from "@/utils/helper";
+import { ProductList } from "@/types/affiliate";
 
-export const EcommerceMetrics = () => {
+export default function EcommerceMetrics({
+  roomId,
+  dateFilter,
+}: {
+  roomId: string;
+  dateFilter: {
+    type: string;
+    start: number | null;
+    end: number | null;
+  };
+}) {
+  
+  const [data, setData] = useState<ProductList>();
+
+  useEffect(() => {
+  if (!roomId) return;
+
+  fetch(`/api/sales?room_id=${roomId}&start_date=${dateFilter.start}&end_date=${dateFilter.end}`)
+      .then(res => res.json())
+      .then((data: ProductList[]) => {
+          getLatestSyncPerDay(data);
+          console.log(data);
+      })
+      .catch(err => {
+          console.error('Fetch error:', err);
+      });
+  }, [roomId, dateFilter]);
+
+  const generateList = (list: ProductList[]) => {
+      console.log(list);
+      setData(list[0]);
+  }
+
+  function getLatestSyncPerDay(data: ProductList[]) {
+      // Map untuk menampung {roomId|date → object dengan syncTime terbesar}
+      const map = new Map();
+
+      data.forEach(item => {
+          const date = item.syncTime.split("T")[0]; // ambil YYYY-MM-DD
+          const key = `${item.roomId}-${date}`;
+
+          if (!map.has(key)) {
+              map.set(key, item);
+          } else {
+              const existing = map.get(key);
+
+              // bandingkan syncTime, ambil yang terbesar
+              if (new Date(item.syncTime) > new Date(existing.syncTime)) {
+                  map.set(key, item);
+              }
+          }
+      });
+
+      return generateList(Array.from(map.values()));
+  }
+
+  console.log(data);
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
       {/* <!-- Metric Item Start --> */}
@@ -19,13 +75,13 @@ export const EcommerceMetrics = () => {
               Direct GMV
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {formatCurrency(108000231)}
+              {data?.stats.data.stats.direct_gmv_local.amount_delimited || 0}
             </h4>
           </div>
-          <Badge color="success">
+          {/* <Badge color="success">
             <ArrowUpIcon />
             11.01%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -41,14 +97,14 @@ export const EcommerceMetrics = () => {
               Sold Item 
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {formatCurrency(89)}
+              {formatCurrency(data?.stats.data.stats.direct_sales || 0)}
             </h4>
           </div>
 
-          <Badge color="error">
+          {/* <Badge color="error">
             <ArrowDownIcon className="text-error-500" />
             9.05%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
