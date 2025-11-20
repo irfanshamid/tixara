@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
+import { useRoom } from "@/hooks/useRoom";
 
 interface ChartTabProps {
   selectedRoom: string;
@@ -19,6 +20,10 @@ const ChartTab: React.FC<ChartTabProps> = ({
   onSelectRoom,
   onFilterChange,
 }) => {
+  const { roomList, loadingRoom } = useRoom();
+
+  console.log('roomList', roomList);
+
   const [selected, setSelected] = useState<
     "optionOne" | "optionTwo" | "optionThree" | "optionFour"
   >("optionOne");
@@ -30,12 +35,6 @@ const ChartTab: React.FC<ChartTabProps> = ({
     selected === option
       ? "shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800"
       : "text-gray-500 dark:text-gray-400";
-
-  const roomList = [
-    { id: '7573979822407027468', name: "kktops" },
-    { id: '7574299200704252684', name: "kktop.dailyfit" },
-    { id: '7574244333054987020', name: "kktop.official" },
-  ];
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -125,6 +124,10 @@ const ChartTab: React.FC<ChartTabProps> = ({
     if (option === "optionThree") applyMonthly();
   };
 
+  useEffect(() => {
+    handleSelectRoom(roomList[0]?.username)
+  },[roomList])
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 relative gap-6">
       {/* SELECT ROOM */}
@@ -133,9 +136,11 @@ const ChartTab: React.FC<ChartTabProps> = ({
         className="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white flex items-center justify-between dropdown-toggle shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800"
       >
         <span>
-          {selectedRoom
-            ? roomList.find((r) => r.id === selectedRoom)?.name
-            : "Select store"}
+          {loadingRoom
+            ? "Loading rooms..."
+            : selectedRoom
+              ? roomList.find((r) => r.username === selectedRoom)?.username
+              : "Select store"}
         </span>
 
         <svg
@@ -157,22 +162,27 @@ const ChartTab: React.FC<ChartTabProps> = ({
         </svg>
       </button>
 
+      {/* DROPDOWN */}
       <Dropdown
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         className="absolute left-0 top-8 flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
       >
         <ul className="flex flex-col gap-1">
-          {roomList.map((item) => (
-            <li key={item.id}>
+          {roomList?.map((item) => (
+            <li key={item.roomId}>
               <DropdownItem
-                onItemClick={() => handleSelectRoom(item.id)}
+                onItemClick={() => handleSelectRoom(item.username)}
                 className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
-                {item.name}
+                {item.username}
               </DropdownItem>
             </li>
           ))}
+
+          {!loadingRoom && roomList?.length === 0 && (
+            <li className="text-gray-500 text-sm px-3 py-2">No rooms found</li>
+          )}
         </ul>
       </Dropdown>
 

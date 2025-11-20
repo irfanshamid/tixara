@@ -1,66 +1,85 @@
-import { ProductList, Stat } from "@/types/affiliate";
+import { ProductList, MoneyValue } from "@/types/affiliate";
 
-export function mergeProductStats(list: ProductList[]): ProductList {
-  console.log("per day in merge", list);
+export function mergeCoreStats(list: ProductList[]): ProductList {
+  if (list.length === 0) throw new Error("Empty list");
 
-  if (list.length === 0) throw new Error("Empty product list");
-
-  // Clone item pertama
+  // Clone element pertama sebagai base
   const result: ProductList = structuredClone(list[0]);
 
-  // --- FIX: kalau segments tidak ada, buat empty segment ---
-  if (!result.stats.data.segments || result.stats.data.segments.length === 0) {
-    result.stats.data.segments = [{ stats: [] }];
-  }
+  const base = result.stats.data.stats;
 
-  const productMap = new Map<string, Stat>();
+  let count = 1;
 
-  list.forEach((item) => {
-    const segments = item.stats.data.segments;
+  list.slice(1).forEach(item => {
+    const stat = item.stats.data.stats;
+    count++;
+    
+    // --- Number fields ---
+    base.ads_roi2_effective_time += stat.ads_roi2_effective_time;
+    base.avg_watching_time += stat.avg_watching_time;
+    base.client_show_cnt += stat.client_show_cnt;
+    base.current_visitor_cnt += stat.current_visitor_cnt;
+    base.direct_sales += stat.direct_sales;
+    base.product_reach_cnt += stat.product_reach_cnt;
+    base.product_view_cnt += stat.product_view_cnt;
+    base.sales += stat.sales;
+    base.show_pv_per_hour += stat.show_pv_per_hour;
+    base.watch_pv += stat.watch_pv;
+    base.watch_pv_one_min_plus += stat.watch_pv_one_min_plus;
+    base.watch_uv += stat.watch_uv;
 
-    // --- FIX: skip item kalau segments tidak valid ---
-    if (!segments || segments.length === 0) return;
+    // --- String numeric fields ---
+    base.avg_view_duration = String(
+      parseFloat(base.avg_view_duration) + parseFloat(stat.avg_view_duration)
+    );
 
-    const seg = segments[0];
-    if (!seg || !seg.stats) return;
+    base.click_through_rate = String(
+      parseFloat(base.click_through_rate) + parseFloat(stat.click_through_rate)
+    );
 
-    seg.stats.forEach((prod) => {
-      const existing = productMap.get(prod.id);
+    base.enter_room_rate = String(
+      parseFloat(base.enter_room_rate) + parseFloat(stat.enter_room_rate)
+    );
 
-      if (!existing) {
-        productMap.set(prod.id, structuredClone(prod));
-      } else {
-        // merge values
-        existing.exposure_cnt += prod.exposure_cnt;
-        existing.direct_sales += prod.direct_sales;
-        existing.total_click_cnt += prod.total_click_cnt;
-        existing.add_shop_cart_cnt += prod.add_shop_cart_cnt;
+    base.enter_room_rate_live_preview = String(
+      parseFloat(base.enter_room_rate_live_preview) +
+      parseFloat(stat.enter_room_rate_live_preview)
+    );
 
-        // merge GMV
-        const g1 = Number(existing.direct_gmv_local.amount);
-        const g2 = Number(prod.direct_gmv_local.amount);
-        const total = g1 + g2;
+    base.product_click_rate = String(
+      parseFloat(base.product_click_rate) +
+      parseFloat(stat.product_click_rate)
+    );
 
-        existing.direct_gmv_local.amount = String(total);
-        existing.direct_gmv_local.amount_delimited = total.toLocaleString("id-ID");
-        existing.direct_gmv_local.amount_formatted = `Rp${total.toLocaleString("id-ID")}`;
+    base.sku_order_rate = String(
+      parseFloat(base.sku_order_rate) + parseFloat(stat.sku_order_rate)
+    );
 
-        // merge CTR (string)
-        const ctr1 = parseFloat(existing.click_through_rate);
-        const ctr2 = parseFloat(prod.click_through_rate);
-        existing.click_through_rate = String(ctr1 + ctr2);
-      }
-    });
+    // --- Money fields ---
+    mergeMoney(base.direct_gmv_local, stat.direct_gmv_local);
+    mergeMoney(base.direct_gmv_local_per_hour, stat.direct_gmv_local_per_hour);
+    mergeMoney(base.live_show_gpm_local, stat.live_show_gpm_local);
+    mergeMoney(base.watch_gpm_local, stat.watch_gpm_local);
+
+    // boolean
+    base.is_ads_roi2 = base.is_ads_roi2 || stat.is_ads_roi2;
   });
 
-  // Replace final stats list
-  const mergedList = Array.from(productMap.values());
+  base.avg_view_duration = String(
+    (parseFloat(base.avg_view_duration) / count).toFixed(2)
+  );
 
-  // --- FIX: Must ensure segments[0] always exists ---
-  result.stats.data.segments![0] = {
-    stats: mergedList,
-  };
+  base.avg_watching_time = 
+    Number((base.avg_watching_time / count).toFixed(2));
 
-  console.log("merged result", result);
   return result;
+}
+
+// Helper untuk merge MoneyValue
+function mergeMoney(base: MoneyValue, add: MoneyValue) {
+  const total = Number(base.amount) + Number(add.amount);
+
+  base.amount = String(total);
+  base.amount_delimited = total.toLocaleString("id-ID");
+  base.amount_formatted = `Rp${total.toLocaleString("id-ID")}`;
 }

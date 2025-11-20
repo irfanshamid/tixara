@@ -4,14 +4,18 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
-const ROOM_IDS = [
-  "7573979822407027468",
-  "7574299200704252684",
-  "7574244333054987020",
-];
-
 export async function GET() {
   try {
+    const rooms = await prisma.roomStats.findMany({
+      select: { roomId: true, username: true }
+    });
+
+    const ROOM_MAP = Object.fromEntries(
+      rooms.map(r => [r.roomId, r.username])
+    );
+
+    const ROOM_IDS = rooms.map(r => r.roomId);
+
     for (const roomId of ROOM_IDS) {
       const payload = {
         request: {
@@ -58,7 +62,7 @@ export async function GET() {
       await prisma.productStats.create({
         data: {
           id: crypto.randomUUID(),
-          roomId,
+          roomId: ROOM_MAP[roomId],
           stats: data,
         },
       });

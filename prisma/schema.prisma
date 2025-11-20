@@ -26,3 +26,12 @@ model SalesStats {
   syncTime  DateTime @default(now())
   stats     Json
 }
+
+model RoomStats {
+  id          String   @id
+  roomId      String   @unique   // ID numeric dari live_meta.id
+  username    String             // kktops
+  displayName String?            
+  stats       Json
+  createdAt   DateTime @default(now())
+}

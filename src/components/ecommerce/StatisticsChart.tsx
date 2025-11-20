@@ -3,31 +3,65 @@ import React from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
+import { ProductList } from "@/types/affiliate";
 
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-export default function StatisticsChart() {
+export default function StatisticsChart({
+  data,
+  loading,
+}: {
+  data: ProductList[];
+  loading: boolean;
+}) {
+
+  const categories =
+    data?.map((item) => {
+      const date = new Date(item.syncTime);
+      return date.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+  }) ?? [];
+
+  const directGMV = data.map((item) => {
+    const val = item?.stats?.data?.stats?.direct_gmv_local?.amount_delimited;
+    if (!val) return 0;
+
+    // hilangkan koma / titik -> convert ke number
+    const num = Number(String(val).replace(/[,.]/g, ""));
+    return isNaN(num) ? 0 : num;
+  });
+
+  const impressions = data.map(
+    (item) => item?.stats.data.stats.client_show_cnt ?? 0
+  );
+
+  console.log(impressions);
+
+
   const options: ApexOptions = {
     legend: {
-      show: true, // Hide legend
+      show: true,
       position: "top",
       horizontalAlign: "left",
     },
-    colors: ["#465FFF", "#94D5B3"], // Define line colors
+    colors: ["#465FFF", "#f0b278"],
+
     chart: {
       fontFamily: "Outfit, sans-serif",
       height: 310,
-      type: "line", // Set the chart type to 'line'
-      toolbar: {
-        show: false, // Hide chart toolbar
-      },
+      type: "line",
+      toolbar: { show: false },
     },
+
     stroke: {
-      curve: "straight", // Define the line style (straight, smooth, or step)
-      width: [2, 2], // Line width for each dataset
+      curve: "straight",
+      width: [2, 2],
     },
 
     fill: {
@@ -37,85 +71,64 @@ export default function StatisticsChart() {
         opacityTo: 0,
       },
     },
+
     markers: {
-      size: 0, // Size of the marker points
-      strokeColors: "#fff", // Marker border color
+      size: 0,
+      strokeColors: "#fff",
       strokeWidth: 2,
-      hover: {
-        size: 6, // Marker size on hover
-      },
+      hover: { size: 6 },
     },
+
     grid: {
-      xaxis: {
-        lines: {
-          show: false, // Hide grid lines on x-axis
-        },
-      },
-      yaxis: {
-        lines: {
-          show: true, // Show grid lines on y-axis
-        },
-      },
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: true } },
     },
-    dataLabels: {
-      enabled: false, // Disable data labels
-    },
+
+    dataLabels: { enabled: false },
+
     tooltip: {
-      enabled: true, // Enable tooltip
-      x: {
-        format: "dd MMM yyyy", // Format for x-axis tooltip
-      },
+      enabled: true,
+      shared: true,
+      intersect: false,
+      x: { format: "dd MMM yyyy" },
     },
+
     xaxis: {
-      type: "category", // Category-based x-axis
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      axisBorder: {
-        show: false, // Hide x-axis border
-      },
-      axisTicks: {
-        show: false, // Hide x-axis ticks
-      },
-      tooltip: {
-        enabled: false, // Disable tooltip for x-axis points
-      },
+      type: "category",
+      categories,
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+      tooltip: { enabled: false },
     },
-    yaxis: {
-      labels: {
-        style: {
-          fontSize: "12px", // Adjust font size for y-axis labels
-          colors: ["#6B7280"], // Color of the labels
+
+    // 🔥 Dual Y-Axis Start Here
+    yaxis: [
+      {
+        seriesName: "Direct GMV",
+        title: { text: "GMV" },
+        labels: {
+          style: { fontSize: "12px", colors: ["#6B7280"] },
         },
       },
-      title: {
-        text: "", // Remove y-axis title
-        style: {
-          fontSize: "0px",
+      {
+        seriesName: "Impressions",
+        opposite: true,
+        title: { text: "Impressions" },
+        labels: {
+          style: { fontSize: "12px", colors: ["#6B7280"] },
         },
       },
-    },
+    ],
   };
 
   const series = [
     {
       name: "Direct GMV",
-      data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
+      data: directGMV,
     },
     {
       name: "Impressions",
-      data: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+      data: impressions,
     },
   ];
   return (
@@ -131,15 +144,21 @@ export default function StatisticsChart() {
         </div>
       </div>
 
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <div className="min-w-[1000px] xl:min-w-full">
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="area"
-            height={310}
-          />
-        </div>
+      <div className="max-w-full overflow-x-auto custom-scrollbar min-h-90">
+        {loading ? (
+          <div className="animate-pulse w-full">
+            <div className="h-80 bg-gray-300 rounded-xl"></div>
+          </div>
+        ):(
+          <div className="min-w-[1000px] xl:min-w-full">
+            <ReactApexChart
+              options={options}
+              series={series}
+              type="area"
+              height={310}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

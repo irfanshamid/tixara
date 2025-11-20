@@ -1,35 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import ChartTab from "@/components/common/ChartTab";
 import MonthlySalesChart from "./MonthlySalesChart";
 import DailyStat from "./DailyStat";
 import StatisticsChart from "./StatisticsChart";
 import RecentOrders from "./RecentOrders";
 import EcommerceMetrics from "./EcommerceMetrics";
+import { useFilter } from "@/hooks/useFilter";
+import { useStat } from "@/hooks/useStat";
 
 export default function DashboardLive() {
-  const [roomId, setRoomId] = useState<string>('7573979822407027468');
-  const now = new Date();
-  const start = new Date(now);
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(now);
-  end.setHours(23, 59, 59, 999);
-
-  // filter: today, last3day, monthly, range
-  const [dateFilter, setDateFilter] = useState<{
-    type: "today" | "last3day" | "monthly" | "range";
-    start: number | null;
-    end: number | null;
-  }>({
-    type: "today",
-    start: start.getTime(),
-    end: end.getTime(),
-  });
+  const { roomId, setRoomId, dateFilter, setDateFilter } = useFilter();
+  const { loadingStat, dataStat, dataListStat } = useStat(roomId, dateFilter);
 
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
-      {/* CHART TAB */}
+      {/* Chart Tab */}
       <div className="col-span-12">
         <ChartTab
           selectedRoom={roomId}
@@ -39,16 +26,16 @@ export default function DashboardLive() {
       </div>
 
       <div className="col-span-12 space-y-6 xl:col-span-6">
-        <EcommerceMetrics roomId={roomId} dateFilter={dateFilter}/>
-        <MonthlySalesChart />
+        <EcommerceMetrics data={dataStat} loading={loadingStat} />
+        <MonthlySalesChart data={dataListStat} loading={loadingStat}/>
       </div>
 
       <div className="col-span-12 xl:col-span-6">
-        <DailyStat roomId={roomId} dateFilter={dateFilter}/>
+        <DailyStat data={dataStat} loading={loadingStat} />
       </div>
 
       <div className="col-span-12">
-        <StatisticsChart />
+        <StatisticsChart data={dataListStat} loading={loadingStat}/>
       </div>
 
       <div className="col-span-12 xl:col-span-12">
