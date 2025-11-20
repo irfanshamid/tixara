@@ -16,14 +16,14 @@ datasource db {
 model ProductStats {
   id        String   @id
   roomId    String
-  syncTime  DateTime @default(now())
+  syncTime  DateTime
   stats     Json
 }
 
 model SalesStats {
   id        String   @id
   roomId    String
-  syncTime  DateTime @default(now())
+  syncTime  DateTime
   stats     Json
 }
 
@@ -33,5 +33,5 @@ model RoomStats {
   username    String             // kktops
   displayName String?            
   stats       Json
-  createdAt   DateTime @default(now())
+  createdAt   DateTime
 }

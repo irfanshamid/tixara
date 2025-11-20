@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getJakartaTime } from "@/utils/helper";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
@@ -58,12 +59,14 @@ export async function GET() {
 
       const data = await response.json();
 
+      
       // Save ke Prisma
       await prisma.productStats.create({
         data: {
           id: crypto.randomUUID(),
           roomId: ROOM_MAP[roomId],
           stats: data,
+          syncTime: getJakartaTime()
         },
       });
 

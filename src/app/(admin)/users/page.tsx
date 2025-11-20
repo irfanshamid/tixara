@@ -4,8 +4,8 @@ import UserTable from "@/components/users/UserList";
 
 export const metadata: Metadata = {
   title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+    "KKTOP Dashboard | User management",
+  description: "This is user portal for user manage",
 };
 
 export default function Users() {

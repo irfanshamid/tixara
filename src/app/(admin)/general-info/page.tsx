@@ -4,8 +4,8 @@ import GeneralInformationCard from "@/components/others/GeneralContent";
 
 export const metadata: Metadata = {
   title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+    "KKTOP Dashboard | User Info",
+  description: "This is user info and manual guide",
 };
 
 export default function Token() {

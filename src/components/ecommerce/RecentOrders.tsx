@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { formatCurrency } from "@/utils/helper";
 import {
   Table,
@@ -13,63 +12,12 @@ import Image from "next/image";
 import { ProductList } from "@/types/affiliate";
 
 export default function RecentOrders({
-  roomId,
-  dateFilter,
+  data,
+  loading,
 }: {
-  roomId: string;
-  dateFilter: {
-    type: string;
-    start: number | null;
-    end: number | null;
-  };
+  data: ProductList | undefined;
+  loading: boolean;
 }) {
-  const [data, setData] = useState<ProductList>();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!roomId) return;
-    setLoading(true);
-    fetch(`/api/product?room_id=${roomId}&start_date=${dateFilter.start}&end_date=${dateFilter.end}`)
-      .then(res => res.json())
-      .then((data: ProductList[]) => {
-        getLatestSyncPerDay(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Fetch error:', err);
-        setLoading(false);
-      });
-  }, [roomId, dateFilter]);
-
-  const generateList = (list: ProductList[]) => {
-    console.log(list);
-    setData(list[0]);
-  }
-
-  function getLatestSyncPerDay(data: ProductList[]) {
-    // Map untuk menampung {roomId|date → object dengan syncTime terbesar}
-    const map = new Map();
-
-    data.forEach(item => {
-      const date = item.syncTime.split("T")[0]; // ambil YYYY-MM-DD
-      const key = `${item.roomId}-${date}`;
-
-      if (!map.has(key)) {
-        map.set(key, item);
-      } else {
-        const existing = map.get(key);
-
-        // bandingkan syncTime, ambil yang terbesar
-        if (new Date(item.syncTime) > new Date(existing.syncTime)) {
-          map.set(key, item);
-        }
-      }
-    });
-
-    return generateList(Array.from(map.values()));
-  }
-
-
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">

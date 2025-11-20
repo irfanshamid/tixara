@@ -9,11 +9,15 @@ import RecentOrders from "./RecentOrders";
 import EcommerceMetrics from "./EcommerceMetrics";
 import { useFilter } from "@/hooks/useFilter";
 import { useStat } from "@/hooks/useStat";
+import { useProduct } from "@/hooks/useProduct";
+import { getJakartaTime } from "@/utils/helper";
 
 export default function DashboardLive() {
   const { roomId, setRoomId, dateFilter, setDateFilter } = useFilter();
   const { loadingStat, dataStat, dataListStat } = useStat(roomId, dateFilter);
+  const { dataProduct, loadingProduct } = useProduct(roomId, dateFilter);
 
+  console.log(getJakartaTime())
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       {/* Chart Tab */}
@@ -39,7 +43,7 @@ export default function DashboardLive() {
       </div>
 
       <div className="col-span-12 xl:col-span-12">
-        <RecentOrders roomId={roomId} dateFilter={dateFilter} />
+        <RecentOrders data={dataProduct} loading={loadingProduct} />
       </div>
     </div>
   );

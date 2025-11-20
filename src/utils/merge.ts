@@ -75,6 +75,59 @@ export function mergeCoreStats(list: ProductList[]): ProductList {
   return result;
 }
 
+
+export function mergeCoreProduct(list: ProductList[]): ProductList {
+  if (list.length === 0) throw new Error("Empty list");
+
+  // Clone element pertama sebagai base
+  const result: ProductList = structuredClone(list[0]);
+
+  // Karena segments adalah array, kita ambil segments pertama
+  const baseSegments = result.stats.data.segments;
+
+
+  list.slice(1).forEach(item => {
+    console.log(item);
+    const segments = item.stats.data.segments;
+
+    segments.forEach((seg, segIndex) => {
+      // Pastikan segment ada di base
+      if (!baseSegments[segIndex]) {
+        baseSegments[segIndex] = structuredClone(seg);
+        return;
+      }
+
+      const base = baseSegments[segIndex];
+      const stat = seg;
+
+      // --- Number fields ---
+      base.stats.forEach((b, idx) => {
+        const s = stat.stats[idx];
+        if (!s) return;
+
+        b.add_shop_cart_cnt += s.add_shop_cart_cnt || 0;
+        b.direct_sales += s.direct_sales || 0;
+        b.total_click_cnt += s.total_click_cnt || 0;
+        b.exposure_cnt += s.exposure_cnt || 0;
+        b.inventory_left_cnt += s.inventory_left_cnt || 0;
+
+        // --- String numeric fields ---
+        b.click_through_rate = String(
+          (parseFloat(b.click_through_rate || "0") + parseFloat(s.click_through_rate || "0")).toFixed(6)
+        );
+
+        // --- Money fields ---
+        mergeMoney(b.direct_gmv_local, s.direct_gmv_local);
+      });
+    });
+  });
+
+  // Jika perlu, rata-rata click_through_rate dll bisa dihitung di sini
+
+  return result;
+}
+
+
 // Helper untuk merge MoneyValue
 function mergeMoney(base: MoneyValue, add: MoneyValue) {
   const total = Number(base.amount) + Number(add.amount);

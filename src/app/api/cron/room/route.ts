@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getJakartaTime } from "@/utils/helper";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
@@ -63,6 +64,7 @@ export async function GET() {
               username: item.creator_meta?.handle ?? "",
               displayName: item.creator_meta?.display_name ?? null,
               stats: item,
+              createdAt: getJakartaTime()
             },
             create: {
               id: crypto.randomUUID(),
@@ -70,6 +72,7 @@ export async function GET() {
               username: item.creator_meta?.handle ?? "",
               displayName: item.creator_meta?.display_name ?? null,
               stats: item,
+              createdAt: getJakartaTime()
             },
           });
 
