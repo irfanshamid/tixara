@@ -165,7 +165,8 @@ const ChartTab: React.FC<ChartTabProps> = ({
           {loadingRoom
             ? "Loading rooms..."
             : selectedRoom
-              ? roomList.find((r) => r.username === selectedRoom)?.username
+              // ? roomList.find((r) => r.username === selectedRoom)?.username
+              ? selectedRoom === 'kktop.dailyfit' ? 'Store 1' : selectedRoom === 'kktop.official' ? 'Store 2' : 'Store 3'
               : "Select store"}
         </span>
 
@@ -195,13 +196,13 @@ const ChartTab: React.FC<ChartTabProps> = ({
         className="absolute left-0 top-8 flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
       >
         <ul className="flex flex-col gap-1">
-          {roomList?.map((item) => (
+          {roomList?.map((item, i) => (
             <li key={item.roomId}>
               <DropdownItem
                 onItemClick={() => handleSelectRoom(item.username)}
                 className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
-                {item.username}
+                Store {i + 1}
               </DropdownItem>
             </li>
           ))}

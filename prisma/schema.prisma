@@ -35,3 +35,9 @@ model RoomStats {
   stats       Json
   createdAt   DateTime
 }
+
+model Affiliate {
+  id          String   @id
+  syncTime   DateTime
+  stats       Json
+}
