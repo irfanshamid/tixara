@@ -2,6 +2,7 @@
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 import { ProductList } from "@/types/affiliate";
+import { MONTHS } from "@/utils/helper";
 
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -20,12 +21,9 @@ export default function MonthlySalesChart({
   const categories =
     data?.map((item) => {
       const date = new Date(item.syncTime);
-      return date.toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
-    }) ?? [];
+      return `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+  }) ?? [];
+
 
   const salesSeries =
     data?.map((item) => item.stats.data.stats.direct_sales) ?? [];

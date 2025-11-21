@@ -46,3 +46,9 @@ export function getJakartaTime(): string {
 
   return `${year}-${pad(month + 1)}-${pad(day)}T${pad(hour)}:${pad(utcMinute)}:${pad(utcSecond)}.${padMs(utcMs)}Z`;
 }
+
+
+export const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];

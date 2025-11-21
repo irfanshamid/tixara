@@ -82,47 +82,60 @@ export function mergeCoreProduct(list: ProductList[]): ProductList {
   // Clone element pertama sebagai base
   const result: ProductList = structuredClone(list[0]);
 
-  // Karena segments adalah array, kita ambil segments pertama
   const baseSegments = result.stats.data.segments;
 
-
   list.slice(1).forEach(item => {
-    console.log(item);
     const segments = item.stats.data.segments;
 
     segments.forEach((seg, segIndex) => {
-      // Pastikan segment ada di base
       if (!baseSegments[segIndex]) {
         baseSegments[segIndex] = structuredClone(seg);
         return;
       }
 
-      const base = baseSegments[segIndex];
-      const stat = seg;
+      const baseSeg = baseSegments[segIndex];
 
-      // --- Number fields ---
-      base.stats.forEach((b, idx) => {
-        const s = stat.stats[idx];
-        if (!s) return;
+      // --- Kita buat map ID untuk mempercepat pencarian ---
+      const baseMap = new Map(baseSeg.stats.map(p => [p.id, p]));
 
-        b.add_shop_cart_cnt += s.add_shop_cart_cnt || 0;
-        b.direct_sales += s.direct_sales || 0;
-        b.total_click_cnt += s.total_click_cnt || 0;
-        b.exposure_cnt += s.exposure_cnt || 0;
-        b.inventory_left_cnt += s.inventory_left_cnt || 0;
+      seg.stats.forEach(prodStat => {
+        const baseProd = baseMap.get(prodStat.id);
 
-        // --- String numeric fields ---
-        b.click_through_rate = String(
-          (parseFloat(b.click_through_rate || "0") + parseFloat(s.click_through_rate || "0")).toFixed(6)
+        // Jika produk belum ada di base → push langsung
+        if (!baseProd) {
+          baseSeg.stats.push(structuredClone(prodStat));
+          return;
+        }
+
+        // =============================
+        //  Numeric Fields
+        // =============================
+        baseProd.add_shop_cart_cnt += prodStat.add_shop_cart_cnt || 0;
+        baseProd.direct_sales += prodStat.direct_sales || 0;
+        baseProd.total_click_cnt += prodStat.total_click_cnt || 0;
+        baseProd.exposure_cnt += prodStat.exposure_cnt || 0;
+
+        // Untuk inventory_left_cnt → ambil *minimum* (logika realistis)
+        baseProd.inventory_left_cnt = Math.min(
+          baseProd.inventory_left_cnt || 0,
+          prodStat.inventory_left_cnt || 0
         );
 
-        // --- Money fields ---
-        mergeMoney(b.direct_gmv_local, s.direct_gmv_local);
+        // =============================
+        //  Rate Fields → dihitung rata-rata
+        // =============================
+        const a = parseFloat(baseProd.click_through_rate || "0");
+        const b = parseFloat(prodStat.click_through_rate || "0");
+
+        baseProd.click_through_rate = ((a + b) / 2).toFixed(6);
+
+        // =============================
+        //  Money Fields (GMV)
+        // =============================
+        mergeMoney(baseProd.direct_gmv_local, prodStat.direct_gmv_local);
       });
     });
   });
-
-  // Jika perlu, rata-rata click_through_rate dll bisa dihitung di sini
 
   return result;
 }

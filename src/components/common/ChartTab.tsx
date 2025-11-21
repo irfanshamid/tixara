@@ -13,12 +13,14 @@ interface ChartTabProps {
     start: number | null;
     end: number | null;
   }) => void;
+  onDownload:() => void; 
 }
 
 const ChartTab: React.FC<ChartTabProps> = ({
   selectedRoom,
   onSelectRoom,
   onFilterChange,
+  onDownload,
 }) => {
   const { roomList, loadingRoom } = useRoom();
 
@@ -46,53 +48,77 @@ const ChartTab: React.FC<ChartTabProps> = ({
   // -----------------------------
   // FILTER HANDLERS
   // -----------------------------
+  const WIB_OFFSET = 7 * 60 * 60 * 1000; // 7 jam
 
   const applyToday = () => {
     const now = new Date();
 
-    // Start of today (00:00:00.000)
-    const start = new Date(now);
-    start.setHours(0, 0, 0, 0);
+    const start = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0, 0, 0, 0
+    ).getTime() + WIB_OFFSET;
 
-    // End of today (23:59:59.999)
-    const end = new Date(now);
-    end.setHours(23, 59, 59, 999);
+    const end = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23, 59, 59, 999
+    ).getTime() + WIB_OFFSET;
 
     onFilterChange({
       type: "today",
-      start: start.getTime(), // timestamp
-      end: end.getTime(),     // timestamp
+      start,
+      end,
     });
   };
 
   const applyLast3Day = () => {
-    const today = new Date();
-    today.setHours(23, 59, 59, 999); // end of today
+    const now = new Date();
 
-    const past = new Date();
-    past.setDate(today.getDate() - 2);
-    past.setHours(0, 0, 0, 0); // start of that day
+    const start = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - 2,
+      0, 0, 0, 0
+    ).getTime() + WIB_OFFSET;
+
+    const end = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23, 59, 59, 999
+    ).getTime() + WIB_OFFSET;
 
     onFilterChange({
       type: "last3day",
-      start: past.getTime(),  // → timestamp in ms
-      end: today.getTime(),
+      start,
+      end,
     });
   };
 
   const applyMonthly = () => {
     const now = new Date();
 
-    const start = new Date(now.getFullYear(), now.getMonth(), 1); // 1st day 00:00:00
-    start.setHours(0, 0, 0, 0);
+    const start = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+      0, 0, 0, 0
+    ).getTime() + WIB_OFFSET;
 
-    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // last day 23:59:59
-    end.setHours(23, 59, 59, 999);
+    const end = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23, 59, 59, 999
+    ).getTime() + WIB_OFFSET;
 
     onFilterChange({
       type: "monthly",
-      start: start.getTime(), // timestamp
-      end: end.getTime(),     // timestamp
+      start,
+      end,
     });
   };
 
@@ -107,8 +133,8 @@ const ChartTab: React.FC<ChartTabProps> = ({
 
     onFilterChange({
       type: "range",
-      start: start.getTime(),
-      end: end.getTime(),
+      start: start.getTime() + WIB_OFFSET,
+      end: end.getTime() + WIB_OFFSET,
     });
   };
 
@@ -249,14 +275,13 @@ const ChartTab: React.FC<ChartTabProps> = ({
         )}
       </div>
 
-      <a
-        href="https://tailadmin.com/pricing"
-        target="_blank"
-        rel="nofollow"
+      <button
+        type="button"
+        onClick={onDownload}
         className="flex items-center justify-center p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm hover:bg-brand-600"
       >
         Export Statistics
-      </a>
+      </button>
     </div>
   );
 };

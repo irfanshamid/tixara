@@ -11,13 +11,23 @@ import { useFilter } from "@/hooks/useFilter";
 import { useStat } from "@/hooks/useStat";
 import { useProduct } from "@/hooks/useProduct";
 import { getJakartaTime } from "@/utils/helper";
+import { useExport } from "@/hooks/useExport";
 
 export default function DashboardLive() {
   const { roomId, setRoomId, dateFilter, setDateFilter } = useFilter();
   const { loadingStat, dataStat, dataListStat } = useStat(roomId, dateFilter);
-  const { dataProduct, loadingProduct } = useProduct(roomId, dateFilter);
+  const { dataProduct, loadingProduct, dataListProduct } = useProduct(roomId, dateFilter);
+  const { exportExcel } = useExport();
 
-  console.log(getJakartaTime())
+  const handleDownload = () => {
+    exportExcel({
+      dataStat: dataListStat,
+      dataProduct: dataListProduct,
+      roomId: roomId,
+      dateFilter: getJakartaTime(),
+    })
+  }
+
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       {/* Chart Tab */}
@@ -26,6 +36,7 @@ export default function DashboardLive() {
           selectedRoom={roomId}
           onSelectRoom={setRoomId}
           onFilterChange={setDateFilter}
+          onDownload={handleDownload}
         />
       </div>
 
