@@ -43,13 +43,14 @@ export async function GET() {
 
       const json = await response.json();
 
-      const list = json?.data?.creator_list?.[0]?.list_create_performance ?? [];
+      const list = json?.data?.creator_list_segments[0].creator_performances ?? [];
 
       if (list.length === 0) break; // kalau sudah tidak ada data, stop pagination
 
       allPerformance.push(...list);
     }
 
+    // console.log(allPerformance);
     // Remove duplicate by id
     const map = new Map();
     for (const item of allPerformance) {
@@ -58,12 +59,12 @@ export async function GET() {
 
     const finalUniqueList = Array.from(map.values());
 
-    // Save result to DB
+    // // Save result to DB
     await prisma.affiliate.create({
       data: {
         id: crypto.randomUUID(),
         syncTime: getJakartaTime(),
-        stats: finalUniqueList
+        stats: finalUniqueList,
       }
     });
 

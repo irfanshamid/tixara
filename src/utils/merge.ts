@@ -1,17 +1,18 @@
 import { ProductList, MoneyValue } from "@/types/affiliate";
 
 export function mergeCoreStats(list: ProductList[]): ProductList {
+  console.log(list);
   if (list.length === 0) throw new Error("Empty list");
 
   // Clone element pertama sebagai base
   const result: ProductList = structuredClone(list[0]);
 
-  const base = result.stats.data.stats;
+  const base = result?.stats?.data?.stats;
 
   let count = 1;
 
   list.slice(1).forEach(item => {
-    const stat = item.stats.data.stats;
+    const stat = item?.stats?.data?.stats;
     count++;
     
     // --- Number fields ---
@@ -30,7 +31,7 @@ export function mergeCoreStats(list: ProductList[]): ProductList {
 
     // --- String numeric fields ---
     base.avg_view_duration = String(
-      parseFloat(base.avg_view_duration) + parseFloat(stat.avg_view_duration)
+      parseFloat(base?.avg_view_duration) + parseFloat(stat.avg_view_duration)
     );
 
     base.click_through_rate = String(
