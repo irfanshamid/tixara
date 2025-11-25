@@ -12,6 +12,7 @@ import { useStat } from "@/hooks/useStat";
 import { useProduct } from "@/hooks/useProduct";
 import { getJakartaTime } from "@/utils/helper";
 import { useExport } from "@/hooks/useExport";
+import AnalitycsChart from "./AnalitycsChart";
 
 export default function DashboardLive() {
   const { roomId, setRoomId, dateFilter, setDateFilter } = useFilter();
@@ -47,6 +48,10 @@ export default function DashboardLive() {
 
       <div className="col-span-12 xl:col-span-6">
         <DailyStat data={dataStat} loading={loadingStat} />
+      </div>
+
+      <div className="col-span-12">
+        <AnalitycsChart data={dataStat} loading={loadingStat}/>
       </div>
 
       <div className="col-span-12">

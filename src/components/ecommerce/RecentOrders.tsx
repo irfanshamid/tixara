@@ -10,14 +10,41 @@ import {
 } from "../ui/table";
 import Image from "next/image";
 import { ProductList } from "@/types/affiliate";
+import { useMemo, useState } from "react";
 
 export default function RecentOrders({
   data,
   loading,
+  fullHeight,
 }: {
   data: ProductList | undefined;
   loading: boolean;
+  fullHeight?: boolean;
 }) {
+  const [search, setSearch] = useState("");
+
+  const products = data?.stats.data?.segments[0]?.stats ?? [];
+
+  const filteredList = useMemo(() => {
+    let list = [...products];
+
+    // Filter
+    if (search) {
+      list = list.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
+        item.id.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    // Sort descending by amount
+    list.sort(
+      (a, b) =>
+        Number(b.direct_gmv_local.amount) - Number(a.direct_gmv_local.amount)
+    );
+
+    return list;
+  }, [search, products]);
+
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
@@ -27,8 +54,15 @@ export default function RecentOrders({
             Product Sales
           </h3>
         </div>
+         <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search product..."
+            className="h-11 w-full sm:w-1/4 rounded-lg border border-gray-200 bg-transparent py-2.5 px-4 text-sm text-gray-800 dark:text-white dark:bg-gray-900"
+          />
       </div>
-      <div className="max-w-full overflow-x-auto max-h-[700px] overflow-y-auto">
+      <div className={`max-w-full overflow-x-auto ${fullHeight ? 'h-full' : 'max-h-[700px] overflow-y-auto'}`}>
         <Table>
           {/* Table Header */}
           <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
@@ -92,9 +126,9 @@ export default function RecentOrders({
             </>
           ):(
             <>
-            {data?.stats.data?.segments[0] ? 
+            {filteredList.length > 0 ? 
               <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {data?.stats.data?.segments[0].stats.map((product, key) => (
+                {filteredList.map((product, key) => (
                   <TableRow key={key} className="">
                     <TableCell className="py-3 max-w-[300px]">
                       <div className="flex items-center gap-3 pr-10">

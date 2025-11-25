@@ -29,7 +29,7 @@ export default function EcommerceMetrics({
               <div className="animate-pulse h-9 bg-gray-300 rounded-full w-full"></div>
             ):(
               <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                {data?.stats.data.stats.direct_gmv_local.amount_delimited || 0}
+                <span className="text-gray-500 text-lg mr-2">Rp</span>{data?.stats.data.stats.direct_gmv_local.amount_delimited || 0}
               </h4>
             )}
           </div>

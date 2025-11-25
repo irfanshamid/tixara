@@ -7,20 +7,27 @@ export async function GET() {
   try {
     const rooms = await prisma.roomStats.findMany({
       select: {
-        roomId: true,       // numeric ID live
-        username: true,     // name
-        displayName: true,  // optional
-        createdAt: true,    // tanggal fetch
-        stats: true,        // optional kalau mau ditampilkan
+        roomId: true,
+        username: true,
+        displayName: true,
+        createdAt: true,
+        stats: true,
       },
       orderBy: {
         createdAt: "desc",
       },
     });
 
+    const unique = rooms.reduce((acc, item) => {
+      if (!acc.has(item.username)) {
+        acc.set(item.username, item);
+      }
+      return acc;
+    }, new Map());
+
     return NextResponse.json({
       success: true,
-      data: rooms,
+      data: Array.from(unique.values()),
     });
   } catch (error) {
     return NextResponse.json(
