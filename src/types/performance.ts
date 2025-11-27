@@ -8,6 +8,13 @@ export interface AffiliateData {
   creator_list_segments: CreatorListSegment[];
 }
 
+export interface AffiliateList {
+  id: string;
+  roomId: string;
+  syncTime: string; // ISO datetime string
+  stats: CreatorPerformance[];
+}
+
 export interface CreatorListSegment {
   time_descriptor: TimeDescriptor;
   creator_performances: CreatorPerformance[];

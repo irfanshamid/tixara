@@ -52,3 +52,22 @@ export const MONTHS = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
+
+export function formatToWIB(dateStr: string): string {
+  const date = new Date(dateStr);
+
+  // convert ke WIB (UTC+7)
+  const wibDate = new Date(date.getTime());
+
+  const day = wibDate.getDate().toString().padStart(2, "0");
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = monthNames[wibDate.getMonth()];
+
+  const year = wibDate.getFullYear();
+
+  const hours = wibDate.getHours().toString().padStart(2, "0");
+  const minutes = wibDate.getMinutes().toString().padStart(2, "0");
+
+  return `${day} ${month} ${year} ${hours}:${minutes}`;
+}

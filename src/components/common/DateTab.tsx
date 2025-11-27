@@ -109,10 +109,8 @@ const DateTab: React.FC<DateTabProps> = ({
     if (!startStr || !endStr) return;
 
     const start = new Date(startStr);
-    start.setHours(0, 0, 0, 0);
 
     const end = new Date(endStr);
-    end.setHours(23, 59, 59, 999);
 
     onFilterChange({
       type: "range",
@@ -127,7 +125,8 @@ const DateTab: React.FC<DateTabProps> = ({
   // -----------------------------
   const handleSelectTab = (option: "optionOne" | "optionTwo" | "optionThree" | "optionFour") => {
     setSelected(option);
-
+    setRangeStart('');
+    setRangeEnd('');
     if (option === "optionOne") applyToday();
     if (option === "optionTwo") applyLast3Day();
     if (option === "optionThree") applyMonthly();

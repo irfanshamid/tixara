@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
-import { ProductList } from "@/types/affiliate";
+import { AffiliateList } from "@/types/performance";
 // import { mergeCoreStats } from "@/utils/merge";
 
 export function useAffiliate(
-    roomId: string, 
-    dateFilter: { 
-        type: string;
-        start: number | null;
-        end: number | null;
-    }
+  dateFilter: { 
+      type: string;
+      start: number | null;
+      end: number | null;
+  }
 ) {
   const [loading, setLoading] = useState<boolean>(true);
-  const [dataStat, setDataStat] = useState<ProductList>();
-//   const [dataListStat, setDataListStat] = useState<ProductList[]>([]);
+  const [dataStat, setDataStat] = useState<AffiliateList>();
+//   const [dataListStat, setDataListStat] = useState<AffiliateList[]>([]);
 
   useEffect(() => {
-    if (!roomId) return;
 
     setLoading(true);
 
@@ -23,7 +21,7 @@ export function useAffiliate(
       `/api/affiliate?start_date=${dateFilter.start}&end_date=${dateFilter.end}`
     )
       .then((res) => res.json())
-      .then((data: ProductList[]) => {
+      .then((data: AffiliateList[]) => {
         getLatestSyncPerDay(data);
         // generateList(data);
         setLoading(false);
@@ -32,9 +30,9 @@ export function useAffiliate(
         console.error("Fetch error:", err);
         setLoading(false);
       });
-  }, [roomId, dateFilter]);
+  }, [dateFilter]);
 
-     const generateList = (list: ProductList[]) => {
+     const generateList = (list: AffiliateList[]) => {
         console.log('per day', list);
         // const reversed = [...list].reverse();
         // setDataListStat(reversed);
@@ -42,7 +40,7 @@ export function useAffiliate(
         setDataStat(list[0]);
     }
 
-    function getLatestSyncPerDay(data: ProductList[]) {
+    function getLatestSyncPerDay(data: AffiliateList[]) {
         // Map untuk menampung {roomId|date → object dengan syncTime terbesar}
         const map = new Map();
 

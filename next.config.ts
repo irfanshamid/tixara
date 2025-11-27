@@ -15,6 +15,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "p16-oec-va.ibyteimg.com",
       },
+      {
+        protocol: "https",
+        hostname: "p16-sign-sg.tiktokcdn.com"
+      },
+      {
+        protocol: "https",
+        hostname: "p19-common-sign-useastred.tiktokcdn-eu.com"
+      },
+      {
+        protocol: "https",
+        hostname: "p16-sign-va.tiktokcdn.com"
+      },
     ],
   },
 

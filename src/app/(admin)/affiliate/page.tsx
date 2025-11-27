@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 // import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
 import React from "react";
-import DemographicCard from "@/components/ecommerce/DemographicCard";
-import Performance from "@/components/affiliate/Performance";
+// import DemographicCard from "@/components/ecommerce/DemographicCard";
+// import Performance from "@/components/affiliate/Performance";
+import DashboardAffiliate from "@/components/affiliate/DashboardAffiliate";
 // import SalesChart from "@/components/affiliate/SalesChart";
 
 export const metadata: Metadata = {
@@ -19,13 +20,13 @@ export default function Affiliate() {
 
         <SalesChart />
       </div> */}
-
+{/* 
       <div className="col-span-12 xl:col-span-5">
         <DemographicCard />
-      </div>
+      </div> */}
 
       <div className="col-span-12 xl:col-span-12">
-        <Performance />
+        <DashboardAffiliate />
       </div>
     </div>
   );
