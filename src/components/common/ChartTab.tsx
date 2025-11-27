@@ -126,10 +126,8 @@ const ChartTab: React.FC<ChartTabProps> = ({
     if (!startStr || !endStr) return;
 
     const start = new Date(startStr);
-    start.setHours(0, 0, 0, 0);
 
     const end = new Date(endStr);
-    end.setHours(23, 59, 59, 999);
 
     onFilterChange({
       type: "range",
@@ -144,7 +142,8 @@ const ChartTab: React.FC<ChartTabProps> = ({
   // -----------------------------
   const handleSelectTab = (option: "optionOne" | "optionTwo" | "optionThree" | "optionFour") => {
     setSelected(option);
-
+    setRangeStart('');
+    setRangeEnd('');
     if (option === "optionOne") applyToday();
     if (option === "optionTwo") applyLast3Day();
     if (option === "optionThree") applyMonthly();
@@ -254,7 +253,7 @@ const ChartTab: React.FC<ChartTabProps> = ({
         {selected === "optionFour" && (
           <div className="flex gap-2 items-center mt-3">
             <input
-              type="date"
+              type="datetime-local"
               value={rangeStart}
               onChange={(e) => {
                 setRangeStart(e.target.value);
@@ -264,7 +263,7 @@ const ChartTab: React.FC<ChartTabProps> = ({
             />
             <span className="text-gray-500">-</span>
             <input
-              type="date"
+              type="datetime-local"
               value={rangeEnd}
               onChange={(e) => {
                 setRangeEnd(e.target.value);
