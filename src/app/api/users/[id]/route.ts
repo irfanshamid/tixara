@@ -4,12 +4,10 @@ import { hashPassword } from "@/lib/auth";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
-
   const user = await prisma.user.findUnique({
-    where: { id: Number(id) },
+    where: { id: Number(params.id) },
   });
 
   if (!user) {
@@ -21,14 +19,12 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
-
   const body = await req.json();
 
   const user = await prisma.user.update({
-    where: { id: Number(id) },
+    where: { id: Number(params.id) },
     data: {
       name: body.name,
       email: body.email,
@@ -41,12 +37,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
-
   await prisma.user.delete({
-    where: { id: Number(id) },
+    where: { id: Number(params.id) },
   });
 
   return NextResponse.json({ message: "Deleted" });
