@@ -24,11 +24,8 @@ export async function PUT(
   context: { params: { id: string } }
 ) {
   const { id } = context.params;
-  const body = await req.json() as {
-    name?: string;
-    email?: string;
-    password?: string;
-  };
+
+  const body = await req.json();
 
   const user = await prisma.user.update({
     where: { id: Number(id) },
