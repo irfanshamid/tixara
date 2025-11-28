@@ -35,11 +35,8 @@ export default function StatisticsChart({
   });
 
   const impressions = data.map(
-    (item) => item?.stats.data.stats.client_show_cnt ?? 0
+    (item) => item?.stats?.data?.stats?.client_show_cnt ?? 0
   );
-
-  console.log(impressions);
-
 
   const options: ApexOptions = {
     legend: {

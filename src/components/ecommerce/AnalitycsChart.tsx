@@ -12,9 +12,9 @@ export default function AnalitycsChart({
 }) {
 
     const statistic = [
-        { title: "GMV Efficiency", value: Math.round(Number(data?.stats.data.stats.direct_gmv_local.amount || 0) / Number(data?.stats.data.stats.client_show_cnt || 0) *1000), preffix: '~', suffix: 'GMV/1000 impressions'  },
+        { title: "GMV Efficiency", value: Math.round(Number(data?.stats.data.stats.direct_gmv_local.amount || 0) / Number(data?.stats.data.stats.client_show_cnt || 0) *1000) || 0, preffix: '~', suffix: 'GMV/1000 impressions'  },
         { title: "Conversion Funnel", value: formatCurrency(Number(data?.stats.data.stats.direct_gmv_local.amount || 0) / Number(data?.stats.data.stats.direct_sales || 0)), preffix: 'Rp', suffix: 'approving per item'  },
-        { title: "Product Engagement Ratio", value: (Number(data?.stats.data.stats.product_reach_cnt || 0) / Number(data?.stats.data.stats.product_view_cnt || 0)).toFixed(2), preffix: '', suffix: 'click/impressions'  },
+        { title: "Product Engagement Ratio", value: Number((Number(data?.stats.data.stats.product_reach_cnt || 0) / Number(data?.stats.data.stats.product_view_cnt || 0)) || 0).toFixed(2) || 0, preffix: '', suffix: 'click/impressions'  },
         {
             title: "Quality Scoring Index",
             value: Number(

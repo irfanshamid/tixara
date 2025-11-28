@@ -1,11 +1,84 @@
 import { ProductList, MoneyValue } from "@/types/affiliate";
 
+const defaultState: ProductList = {
+  id: "",
+  roomId: "",
+  syncTime: new Date().toISOString(),
+  stats: {
+    code: 0,
+    data: {
+      stats: {
+        ads_roi2_effective_time: 0,
+        avg_view_duration: "0",
+        avg_watching_time: 0,
+        click_through_rate: "0",
+        client_show_cnt: 0,
+        current_visitor_cnt: 0,
+
+        direct_gmv_local: {
+           amount: '0',
+            amount_delimited: '0',
+            amount_formatted: '0',
+            currency_code: '0',
+            currency_symbol: '0',
+        },
+        direct_gmv_local_per_hour: {
+           amount: '0',
+            amount_delimited: '0',
+            amount_formatted: '0',
+            currency_code: '0',
+            currency_symbol: '0',
+        },
+
+        direct_sales: 0,
+        enter_room_rate: "0",
+        enter_room_rate_live_preview: "0",
+        is_ads_roi2: false,
+
+        live_show_gpm_local: {
+           amount: '0',
+            amount_delimited: '0',
+            amount_formatted: '0',
+            currency_code: '0',
+            currency_symbol: '0',
+        },
+
+        product_click_rate: "0",
+        product_reach_cnt: 0,
+        product_view_cnt: 0,
+
+        sales: 0,
+        show_pv_per_hour: 0,
+        sku_order_rate: "0",
+
+        watch_gpm_local: {
+           amount: '0',
+            amount_delimited: '0',
+            amount_formatted: '0',
+            currency_code: '0',
+            currency_symbol: '0',
+        },
+
+        watch_pv: 0,
+        watch_pv_one_min_plus: 0,
+        watch_uv: 0,
+      },
+
+      stats_benchmark_data: {
+        market_cmp_data: [],
+        self_cmp_data: [],
+      },
+
+      segments: []
+    }
+  }
+};
+
 export function mergeCoreStats(list: ProductList[]): ProductList {
-  console.log(list);
   if (list.length === 0) throw new Error("Empty list");
 
   // Clone element pertama sebagai base
-  const result: ProductList = structuredClone(list[0]);
+  const result: ProductList = structuredClone(list[0]?.stats?.data?.stats?.direct_sales ? list[0] : defaultState);
 
   const base = result?.stats?.data?.stats;
 
@@ -67,11 +140,11 @@ export function mergeCoreStats(list: ProductList[]): ProductList {
   });
 
   base.avg_view_duration = String(
-    (parseFloat(base.avg_view_duration) / count).toFixed(2)
+    (parseFloat(base.avg_view_duration || '0') / count).toFixed(2)
   );
 
   base.avg_watching_time = 
-    Number((base.avg_watching_time / count).toFixed(2));
+    Number((base.avg_watching_time || 0 / count).toFixed(2));
 
   return result;
 }
@@ -83,10 +156,10 @@ export function mergeCoreProduct(list: ProductList[]): ProductList {
   // Clone element pertama sebagai base
   const result: ProductList = structuredClone(list[0]);
 
-  const baseSegments = result.stats.data.segments;
+  const baseSegments = result?.stats?.data?.segments || [];
 
   list.slice(1).forEach(item => {
-    const segments = item.stats.data.segments;
+    const segments = item?.stats?.data?.segments;
 
     segments.forEach((seg, segIndex) => {
       if (!baseSegments[segIndex]) {

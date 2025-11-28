@@ -26,7 +26,7 @@ export default function MonthlySalesChart({
 
 
   const salesSeries =
-    data?.map((item) => item.stats.data.stats.direct_sales) ?? [];
+    data?.map((item) => item?.stats?.data?.stats?.direct_sales) ?? [];
 
 
   const options: ApexOptions = {
