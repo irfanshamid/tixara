@@ -39,3 +39,36 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Error creating user" }, { status: 500 });
   }
 }
+
+export async function PUT(req: Request) {
+  const body = await req.json();
+
+  if (!body.id) {
+    return NextResponse.json({ error: "ID required" }, { status: 400 });
+  }
+
+  const user = await prisma.user.update({
+    where: { id: Number(body.id) },
+    data: {
+      name: body.name,
+      email: body.email,
+      ...(body.password && { password: hashPassword(body.password) }),
+    },
+  });
+
+  return NextResponse.json({ message: "Updated", user });
+}
+
+export async function DELETE(req: Request) {
+  const body = await req.json();
+
+  if (!body.id) {
+    return NextResponse.json({ error: "ID required" }, { status: 400 });
+  }
+
+  await prisma.user.delete({
+    where: { id: Number(body.id) },
+  });
+
+  return NextResponse.json({ message: "Deleted" });
+}

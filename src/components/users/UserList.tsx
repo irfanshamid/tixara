@@ -87,19 +87,25 @@ export default function UserTable() {
   const handleDelete = async (id: number) => {
     if (!confirm("Delete this user?")) return;
 
-    await fetch(`/api/users/${id}`, { method: "DELETE" });
+    await fetch(`/api/users`, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),   // <- HARUS stringify
+    });
+
     loadUsers();
   };
 
+
   const handleSubmit = async () => {
     const payload = {
+      id: selectedUser?.id,        // <- tambahkan ID
       name: form.name,
       email: form.email,
       ...(form.password ? { password: form.password } : {}),
     };
 
-    if (isEdit && selectedUser) {
-      await fetch(`/api/users/${selectedUser.id}`, {
+    if (isEdit) {
+      await fetch("/api/users", {
         method: "PUT",
         body: JSON.stringify(payload),
       });
