@@ -2,16 +2,20 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { hashPassword } from "@/lib/auth";
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
+// -----------------------------
+// GET /api/users/[id]
+// -----------------------------
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const id = Number(context.params.id);
 
-export async function GET(req: NextRequest, { params }: RouteParams) {
-  const user = await prisma.user.findUnique({
-    where: { id: Number(params.id) },
-  });
+  if (isNaN(id)) {
+    return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+  }
+
+  const user = await prisma.user.findUnique({ where: { id } });
 
   if (!user) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
@@ -20,29 +24,48 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   return NextResponse.json(user);
 }
 
-export async function PUT(req: NextRequest, { params }: RouteParams) {
-  const body = await req.json() as {
-    name?: string;
-    email?: string;
-    password?: string;
-  };
+// -----------------------------
+// PUT /api/users/[id]
+// -----------------------------
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const id = Number(context.params.id);
+
+  if (isNaN(id)) {
+    return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+  }
+
+  const { name, email, password }: { name?: string; email?: string; password?: string } =
+    await req.json();
 
   const user = await prisma.user.update({
-    where: { id: Number(params.id) },
+    where: { id },
     data: {
-      name: body.name,
-      email: body.email,
-      ...(body.password && { password: hashPassword(body.password) }),
+      ...(name && { name }),
+      ...(email && { email }),
+      ...(password && { password: hashPassword(password) }),
     },
   });
 
   return NextResponse.json({ message: "Updated", user });
 }
 
-export async function DELETE(req: NextRequest, { params }: RouteParams) {
-  await prisma.user.delete({
-    where: { id: Number(params.id) },
-  });
+// -----------------------------
+// DELETE /api/users/[id]
+// -----------------------------
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const id = Number(context.params.id);
+
+  if (isNaN(id)) {
+    return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+  }
+
+  await prisma.user.delete({ where: { id } });
 
   return NextResponse.json({ message: "Deleted" });
 }
