@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,32 +8,32 @@ datasource db {
 }
 
 model ProductStats {
-  id        String   @id
-  roomId    String
-  syncTime  DateTime
-  stats     Json
+  id       String   @id
+  roomId   String
+  syncTime DateTime
+  stats    Json
 }
 
 model SalesStats {
-  id        String   @id
-  roomId    String
-  syncTime  DateTime
-  stats     Json
+  id       String   @id
+  roomId   String
+  syncTime DateTime
+  stats    Json
 }
 
 model RoomStats {
   id          String   @id
-  roomId      String   @unique   // ID numeric dari live_meta.id
-  username    String             // kktops
-  displayName String?            
+  roomId      String   @unique
+  username    String
+  displayName String?
   stats       Json
   createdAt   DateTime
 }
 
 model Affiliate {
-  id          String   @id
-  syncTime   DateTime
-  stats       Json
+  id       String   @id
+  syncTime DateTime
+  stats    Json
 }
 
 model User {
@@ -51,3 +45,10 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model Token {
+  id        Int   @id @default(autoincrement())
+  updatedAt DateTime @updatedAt
+  code      String
+  value     String @db.Text
+  status    Int
+}
