@@ -20,6 +20,8 @@ export default function DashboardLive() {
   const { dataProduct, loadingProduct, dataListProduct } = useProduct(roomId, dateFilter);
   const { exportExcel } = useExport();
 
+  console.log('dataListStat', dataListStat);
+
   const handleDownload = () => {
     exportExcel({
       dataStat: dataListStat,
