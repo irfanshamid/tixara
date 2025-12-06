@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "This is Next.js Calender page for TailAdmin  Tailwind CSS Admin Dashboard Template",
   // other metadata
 };
-export default function page() {
+export default function CalendarPage() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Calendar" />
