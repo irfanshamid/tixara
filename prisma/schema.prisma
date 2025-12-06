@@ -23,8 +23,8 @@ model SalesStats {
 
 model RoomStats {
   id          String   @id
-  roomId      String   @unique
-  username    String
+  roomId      String   
+  username    String   @unique
   displayName String?
   stats       Json
   createdAt   DateTime

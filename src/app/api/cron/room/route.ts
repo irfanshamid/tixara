@@ -114,13 +114,15 @@ export async function GET() {
     const rooms = data.data.stats;
 
     for (const item of rooms) {
+      const username = item?.creator_meta?.handle;
       const liveId = item?.live_meta?.id;
-      if (!liveId) continue;
+
+      if (!username || !liveId) continue;
 
       await prisma.roomStats.upsert({
-        where: { roomId: String(liveId) },
+        where: { username },
         update: {
-          username: item.creator_meta?.handle ?? "",
+          roomId: String(liveId),
           displayName: item.creator_meta?.display_name ?? null,
           stats: item,
           createdAt: getJakartaTime(),
@@ -128,7 +130,7 @@ export async function GET() {
         create: {
           id: crypto.randomUUID(),
           roomId: String(liveId),
-          username: item.creator_meta?.handle ?? "",
+          username,
           displayName: item.creator_meta?.display_name ?? null,
           stats: item,
           createdAt: getJakartaTime(),

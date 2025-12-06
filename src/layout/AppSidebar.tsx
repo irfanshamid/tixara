@@ -9,9 +9,11 @@ import {
   ChatIcon,
   CheckCircleIcon,
   ChevronDownIcon,
+  DollarLineIcon,
   GridIcon,
   HorizontaLDots,
   InfoIcon,
+  TimeIcon,
   UserCircleIcon,
 } from "../icons/index";
 // import SidebarWidget from "./SidebarWidget";
@@ -25,12 +27,19 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
+    icon: <DollarLineIcon />,
+    name: "Sales Performances",
+    path: "/",
+  },
+  {
     icon: <GridIcon />,
-    name: "Dashboard",
-    subItems: [
-      { name: "Live Activity", path: "/", pro: false },
-      { name: "Affiliate Performances", path: "/affiliate", pro: false },
-    ],
+    name: "Affiliate Performances",
+    path: "/affiliate",
+  },
+  {
+    icon: <TimeIcon />,
+    name: "Live Record",
+    path: "/live",
   },
   {
     icon: <BoxCubeIcon />,
