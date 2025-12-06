@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { Metadata } from "next";
 import React from "react";
