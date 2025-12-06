@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import DefaultModal from "@/components/example/ModalExample/DefaultModal";
 import FormInModal from "@/components/example/ModalExample/FormInModal";

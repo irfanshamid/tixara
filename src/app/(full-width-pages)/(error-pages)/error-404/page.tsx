@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import GridShape from "@/components/common/GridShape";
 import { Metadata } from "next";
 import Image from "next/image";

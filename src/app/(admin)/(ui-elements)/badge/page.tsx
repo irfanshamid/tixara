@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Badge from "@/components/ui/badge/Badge";
 import { PlusIcon } from "@/icons";

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ResponsiveImage from "@/components/ui/images/ResponsiveImage";
