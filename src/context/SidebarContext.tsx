@@ -1,5 +1,4 @@
 "use client";
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 type SidebarContextType = {
@@ -28,24 +27,17 @@ export const useSidebar = () => {
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // prevent hydration mismatch
-  const [mounted, setMounted] = useState(false);
-
-  // main states
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
   const [isHovered, setIsHovered] = useState(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
-  // handle screen width detection
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-
       if (!mobile) {
         setIsMobileOpen(false);
       }
@@ -54,24 +46,22 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // mark hydration complete
-    setMounted(true);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  // 🧨 Prevent hydration mismatch: don't render provider until mounted
-  if (!mounted) {
-    return null;
-  }
+  const toggleSidebar = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
-  const toggleSidebar = () => setIsExpanded((prev) => !prev);
-  const toggleMobileSidebar = () => setIsMobileOpen((prev) => !prev);
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen((prev) => !prev);
+  };
 
-  const toggleSubmenu = (item: string) =>
+  const toggleSubmenu = (item: string) => {
     setOpenSubmenu((prev) => (prev === item ? null : item));
+  };
 
   return (
     <SidebarContext.Provider
