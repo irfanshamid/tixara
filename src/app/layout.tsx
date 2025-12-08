@@ -1,7 +1,7 @@
 import { Outfit } from 'next/font/google';
 import './globals.css';
 
-import { SidebarProvider } from '@/context/SidebarContext';
+// import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ToastClient } from '@/components/common/ToastClient';
 
@@ -14,11 +14,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  console.log(children);
   return (
     <html lang="en">
       <body className={`${outfit.className} dark:bg-gray-900`}>
         <ThemeProvider>
-          <SidebarProvider>{children}</SidebarProvider>
+          {/* <SidebarProvider>{children}</SidebarProvider> */}
           <ToastClient />
         </ThemeProvider>
       </body>
