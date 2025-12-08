@@ -3,7 +3,7 @@ import './globals.css';
 
 import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
-import { ToastContainer } from 'react-toastify';
+import { ToastClient } from '@/components/common/ToastClient';
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className={`${outfit.className} dark:bg-gray-900`}>
         <ThemeProvider>
           <SidebarProvider>{children}</SidebarProvider>
-          <ToastContainer />
+          <ToastClient />
         </ThemeProvider>
       </body>
     </html>
