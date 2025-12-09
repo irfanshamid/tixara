@@ -30,7 +30,7 @@ export default function AdminClient({
 
     if (!token) {
       localStorage.removeItem("token");
-      router.replace("/signin");
+      router.replace("/auth/signin");
     }
   }, [router]);
 

@@ -59,7 +59,7 @@ export default function SignInForm() {
         progress: undefined,
         theme: "light",
       });
-      router.push("/"); // redirect ke dashboard
+      router.push("/admin"); // redirect ke dashboard
     } catch (err) {
       console.error("Login error:", err);
       setLoading(false);

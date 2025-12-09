@@ -29,27 +29,27 @@ const navItems: NavItem[] = [
   {
     icon: <DollarLineIcon />,
     name: "Sales Performances",
-    path: "/",
+    path: "/admin",
   },
   {
     icon: <GridIcon />,
     name: "Affiliate Performances",
-    path: "/affiliate",
+    path: "/admin/affiliate",
   },
   {
     icon: <TimeIcon />,
     name: "Live Record",
-    path: "/live",
+    path: "/admin/live",
   },
   {
     icon: <BoxCubeIcon />,
     name: "Product Analitycs",
-    path: "/products",
+    path: "/admin/products",
   },
   {
     icon: <ChatIcon />,
     name: "AI Asistants",
-    path: "/ai",
+    path: "/admin/ai",
   },
 ];
 
@@ -57,17 +57,17 @@ const othersItems: NavItem[] = [
   {
     icon: <CheckCircleIcon />,
     name: "Token Monitoring",
-    path: "/token",
+    path: "/admin/token",
   },
   {
     icon: <UserCircleIcon />,
     name: "User Administrator",
-    path: "/users",
+    path: "/admin/users",
   },
   {
     icon: <InfoIcon />,
     name: "General Info",
-    path: "/general-info",
+    path: "/admin/general-info",
   },
 ];
 
