@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState,useCallback } from "react";
+import React, { useEffect, useRef, useState,useCallback, ElementType } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -20,34 +20,34 @@ import {
 
 type NavItem = {
   name: string;
-  icon: React.ReactNode;
+  icon: ElementType;
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
 const navItems: NavItem[] = [
   {
-    icon: <DollarLineIcon />,
+    icon: DollarLineIcon,
     name: "Sales Performances",
     path: "/admin",
   },
   {
-    icon: <GridIcon />,
+    icon: GridIcon,
     name: "Affiliate Performances",
     path: "/admin/affiliate",
   },
   {
-    icon: <TimeIcon />,
+    icon: TimeIcon,
     name: "Live Record",
     path: "/admin/live",
   },
   {
-    icon: <BoxCubeIcon />,
+    icon: BoxCubeIcon,
     name: "Product Analitycs",
     path: "/admin/products",
   },
   {
-    icon: <ChatIcon />,
+    icon: ChatIcon,
     name: "AI Asistants",
     path: "/admin/ai",
   },
@@ -55,17 +55,17 @@ const navItems: NavItem[] = [
 
 const othersItems: NavItem[] = [
   {
-    icon: <CheckCircleIcon />,
+    icon: CheckCircleIcon,
     name: "Token Monitoring",
     path: "/admin/token",
   },
   {
-    icon: <UserCircleIcon />,
+    icon: UserCircleIcon,
     name: "User Administrator",
     path: "/admin/users",
   },
   {
-    icon: <InfoIcon />,
+    icon: InfoIcon,
     name: "General Info",
     path: "/admin/general-info",
   },
@@ -102,7 +102,7 @@ const AppSidebar: React.FC = () => {
                     : "menu-item-icon-inactive"
                 }`}
               >
-                {nav.icon}
+                <nav.icon />
               </span>
               {(isExpanded || isHovered || isMobileOpen) && (
                 <span className={`menu-item-text`}>{nav.name}</span>
@@ -133,7 +133,7 @@ const AppSidebar: React.FC = () => {
                       : "menu-item-icon-inactive"
                   }`}
                 >
-                  {nav.icon}
+                  <nav.icon/>
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
                   <span className={`menu-item-text`}>{nav.name}</span>
