@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getJakartaTime } from "@/utils/helper";
-import { CreatorPerformance } from "@/types/performance";
+import { prisma } from "../../../../lib/prisma";
+import { getJakartaTime } from "../../../../utils/helper";
+import { CreatorPerformance } from "../../../../types/performance";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

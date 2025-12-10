@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../../../lib/prisma";
 import { NextResponse } from "next/server";
-import { hashPassword } from "@/lib/auth";
+import { hashPassword } from "../../../lib/auth";
 
 export async function GET() {
   const users = await prisma.user.findMany({
