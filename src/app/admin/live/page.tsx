@@ -2,11 +2,11 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import React from "react";
-import DashboardTimestamp from "@/components/live/DashboardTimestamp";
+import DashboardTimestamp from "../../../components/live/DashboardTimestamp";
 
 export const metadata: Metadata = {
   title:
-    "KKTOP Dashboard | Live performances",
+    "Live SentinelDashboard | Live performances",
   description: "This is live portal performances",
 };
 

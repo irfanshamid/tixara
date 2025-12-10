@@ -1,17 +1,17 @@
 "use client";
 
 import React from "react";
-import ChartTab from "@/components/common/ChartTab";
+import ChartTab from "../../components/common/ChartTab";
 import MonthlySalesChart from "./MonthlySalesChart";
 import DailyStat from "./DailyStat";
 import StatisticsChart from "./StatisticsChart";
 import RecentOrders from "./RecentOrders";
 import EcommerceMetrics from "./EcommerceMetrics";
-import { useFilter } from "@/hooks/useFilter";
-import { useStat } from "@/hooks/useStat";
-import { useProduct } from "@/hooks/useProduct";
-import { getJakartaTime } from "@/utils/helper";
-import { useExport } from "@/hooks/useExport";
+import { useFilter } from "../../hooks/useFilter";
+import { useStat } from "../../hooks/useStat";
+import { useProduct } from "../../hooks/useProduct";
+import { getJakartaTime } from "../../utils/helper";
+import { useExport } from "../../hooks/useExport";
 import AnalitycsChart from "./AnalitycsChart";
 
 export default function DashboardLive() {

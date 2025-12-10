@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-// import { getJakartaTime } from "@/utils/helper";
-// import { useExport } from "@/hooks/useExport";
+// import { getJakartaTime } from "../../utils/helper";
+// import { useExport } from "../../hooks/useExport";
 import DateTab from "../common/DateTab";
-import { useFilterDate } from "@/hooks/useFilterDate";
+import { useFilterDate } from "../../hooks/useFilterDate";
 import SalesList from "./SalesList";
-import { useAffiliate } from "@/hooks/useAffiliate";
+import { useAffiliate } from "../../hooks/useAffiliate";
 
 export default function DashboardAffiliate() {
   const { dateFilter, setDateFilter } = useFilterDate();

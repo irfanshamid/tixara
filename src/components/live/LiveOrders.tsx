@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { ProductList } from "@/types/affiliate";
-import { formatCurrency } from "@/utils/helper";
+import { ProductList } from "../../types/affiliate";
+import { formatCurrency } from "../../utils/helper";
 import { useState } from "react";
 
 export default function LiveOrders({

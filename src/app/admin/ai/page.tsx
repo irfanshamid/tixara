@@ -1,14 +1,14 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-// import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
+// import { EcommerceMetrics } from "../../../components/ecommerce/EcommerceMetrics";
 import React from "react";
-// import RecentOrders from "@/components/ecommerce/RecentOrders";
+// import RecentOrders from "../../../components/ecommerce/RecentOrders";
 
 export const metadata: Metadata = {
   title:
-    "KKTOP Dashboard | AI Analitycs",
-  description: "AI ft. KKTOPS",
+    "Live SentinelDashboard | AI Analitycs",
+  description: "AI ft. Live Sentinel",
 };
 
 export default function AI() {

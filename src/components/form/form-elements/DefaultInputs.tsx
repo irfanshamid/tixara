@@ -4,8 +4,7 @@ import ComponentCard from '../../common/ComponentCard';
 import Label from '../Label';
 import Input from '../input/InputField';
 import Select from '../Select';
-import { ChevronDownIcon, EyeCloseIcon, EyeIcon, TimeIcon } from '../../../icons';
-import DatePicker from '@/components/form/date-picker';
+import { ChevronDownIcon, EyeClosed, EyeIcon, Timer } from 'lucide-react';
 
 export default function DefaultInputs() {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +25,7 @@ export default function DefaultInputs() {
         </div>
         <div>
           <Label>Input with Placeholder</Label>
-          <Input type="text" placeholder="info@gmail.com" />
+          <Input type="text" placeholder="info../..gmail.com" />
         </div>
         <div>
           <Label>Select Input</Label>
@@ -56,22 +55,10 @@ export default function DefaultInputs() {
               {showPassword ? (
                 <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
               ) : (
-                <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                <EyeClosed className="fill-gray-500 dark:fill-gray-400" />
               )}
             </button>
           </div>
-        </div>
-
-        <div>
-          <DatePicker
-            id="date-picker"
-            label="Date Picker Input"
-            placeholder="Select a date"
-            onChange={(dates, currentDateString) => {
-              // Handle your logic
-              console.log({ dates, currentDateString });
-            }}
-          />
         </div>
 
         <div>
@@ -84,7 +71,7 @@ export default function DefaultInputs() {
               onChange={(e) => console.log(e.target.value)}
             />
             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <TimeIcon />
+              <Timer />
             </span>
           </div>
         </div>

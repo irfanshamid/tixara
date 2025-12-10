@@ -1,7 +1,7 @@
 "use client";
 
-import { ProductList } from "@/types/affiliate";
-import { formatCurrency } from "@/utils/helper";
+import { ProductList } from "../../types/affiliate";
+import { formatCurrency } from "../../utils/helper";
 
 export default function AnalitycsChart({
   data,

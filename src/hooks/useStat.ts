@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ProductList } from "@/types/affiliate";
-import { mergeCoreStats } from "@/utils/merge";
+import { ProductList } from "./../types/affiliate";
+import { mergeCoreStats } from "./../utils/merge";
 
 export function useStat(
     roomId: string, 

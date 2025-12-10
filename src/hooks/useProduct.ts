@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ProductList } from "@/types/affiliate";
-import { mergeCoreProduct } from "@/utils/merge";
+import { ProductList } from "./../types/affiliate";
+import { mergeCoreProduct } from "./../utils/merge";
 
 export function useProduct(
     roomId: string, 

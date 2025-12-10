@@ -2,11 +2,11 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import React from "react";
-import GeneralInformationCard from "@/components/others/GeneralContent";
+import GeneralInformationCard from "../../../components/others/GeneralContent";
 
 export const metadata: Metadata = {
   title:
-    "KKTOP Dashboard | User Info",
+    "Live SentinelDashboard | User Info",
   description: "This is user info and manual guide",
 };
 

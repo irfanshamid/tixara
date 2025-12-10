@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { useFilter } from "@/hooks/useFilter";
+import { useFilter } from "../../hooks/useFilter";
 import LiveOrders from "./LiveOrders";
-import { useLive } from "@/hooks/useLive";
+import { useLive } from "../../hooks/useLive";
 import LiveTab from "../common/LiveTab";
 
 export default function DashboardTimestamp() {

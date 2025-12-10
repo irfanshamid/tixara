@@ -1,5 +1,5 @@
-import { ProductList, Stat } from "@/types/affiliate";
-import { formatCurrency } from "@/utils/helper";
+import { ProductList, Stat } from "./../types/affiliate";
+import { formatCurrency } from "./../utils/helper";
 import * as XLSX from "xlsx";
 
 type CellValue = string | number | boolean | null | undefined;

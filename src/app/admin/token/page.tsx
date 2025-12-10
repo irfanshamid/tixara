@@ -2,11 +2,11 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import React from "react";
-import TokenList from "@/components/others/TokenList";
+import TokenList from "../../../components/others/TokenList";
 
 export const metadata: Metadata = {
   title:
-    "KKTOP Dashboard | Secret list",
+    "Live SentinelDashboard | Secret list",
   description: "This is token management for sales data",
 };
 

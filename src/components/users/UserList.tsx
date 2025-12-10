@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { formatToWIB } from "@/utils/helper";
+import { formatToWIB } from "../../utils/helper";
 
 // =============================
 // Types

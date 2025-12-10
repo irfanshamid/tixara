@@ -5,7 +5,7 @@ import Button from "../../ui/button/Button";
 import { Modal } from "../../ui/modal";
 import Label from "../../form/Label";
 import Input from "../../form/input/InputField";
-import { useModal } from "@/hooks/useModal";
+import { useModal } from "../../hooks/useModal";
 
 export default function FormInModal() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -42,7 +42,7 @@ export default function FormInModal() {
 
             <div className="col-span-1">
               <Label>Last Name</Label>
-              <Input type="email" placeholder="emirhanboruch55@gmail.com" />
+              <Input type="email" placeholder="emirhanboruch55../..gmail.com" />
             </div>
 
             <div className="col-span-1">

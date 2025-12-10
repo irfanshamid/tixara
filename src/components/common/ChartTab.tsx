@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-import { useRoom } from "@/hooks/useRoom";
+import { useRoom } from "../../hooks/useRoom";
 
 interface ChartTabProps {
   selectedRoom: string;

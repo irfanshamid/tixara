@@ -1,8 +1,8 @@
 "use client";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
-import { ProductList } from "@/types/affiliate";
-import { MONTHS } from "@/utils/helper";
+import { ProductList } from "../../types/affiliate";
+import { MONTHS } from "../../utils/helper";
 
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {

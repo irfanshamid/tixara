@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { AffiliateList } from "@/types/performance";
-// import { mergeCoreStats } from "@/utils/merge";
+import { AffiliateList } from "./../types/performance";
+// import { mergeCoreStats } from "./../utils/merge";
 
 export function useAffiliate(
   dateFilter: { 

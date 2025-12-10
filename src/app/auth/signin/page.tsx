@@ -4,7 +4,7 @@ import SignInForm from "@/components/auth/SignInForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "KKTOP Dashboard | Login",
+  title: "Live SentinelDashboard | Login",
   description: "User sign in",
 };
 

@@ -1,9 +1,9 @@
 "use client";
 
-import Input from "@/components/form/input/InputField";
-import Label from "@/components/form/Label";
-import Button from "@/components/ui/button/Button";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import Input from "../../components/form/input/InputField";
+import Label from "../../components/form/Label";
+import Button from "../../components/ui/button/Button";
+import { ChevronLeftIcon, EyeClosed, Eye } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -104,7 +104,7 @@ export default function SignInForm() {
               <div>
                 <Label>Email <span className="text-error-500">*</span></Label>
                 <Input 
-                  placeholder="info@gmail.com" 
+                  placeholder="info../..gmail.com" 
                   type="email"
                   defaultValue={email}
                   onChange={e => setEmail(e.target.value)}
@@ -125,8 +125,8 @@ export default function SignInForm() {
                     className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
                   >
                     {showPassword 
-                      ? <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                      : <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                      ? <Eye className="fill-gray-500 dark:fill-gray-400" />
+                      : <EyeClosed className="fill-gray-500 dark:fill-gray-400" />
                     }
                   </span>
                 </div>

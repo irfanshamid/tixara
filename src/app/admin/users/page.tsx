@@ -2,11 +2,11 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import React from "react";
-import UserTable from "@/components/users/UserList";
+import UserTable from "../../../components/users/UserList";
 
 export const metadata: Metadata = {
   title:
-    "KKTOP Dashboard | User management",
+    "Live SentinelDashboard | User management",
   description: "This is user portal for user manage",
 };
 

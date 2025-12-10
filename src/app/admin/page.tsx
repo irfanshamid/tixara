@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-import DashboardLive from "@/components/ecommerce/DashboardLive";
+import DashboardLive from "../../components/ecommerce/DashboardLive";
 
 export const metadata: Metadata = {
-  title: "KKTOP Dashboard",
+  title: "Live SentinelDashboard",
 };
 
 export default function Ecommerce() {

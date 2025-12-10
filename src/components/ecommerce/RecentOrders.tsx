@@ -1,6 +1,6 @@
 "use client";
 
-import { formatCurrency } from "@/utils/helper";
+import { formatCurrency } from "../../utils/helper";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Image from "next/image";
-import { ProductList } from "@/types/affiliate";
+import { ProductList } from "../../types/affiliate";
 import { useMemo, useState } from "react";
 
 export default function RecentOrders({

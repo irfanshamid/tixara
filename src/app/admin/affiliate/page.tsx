@@ -1,16 +1,16 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-// import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
+// import { EcommerceMetrics } from "../../../components/ecommerce/EcommerceMetrics";
 import React from "react";
-// import DemographicCard from "@/components/ecommerce/DemographicCard";
-// import Performance from "@/components/affiliate/Performance";
-import DashboardAffiliate from "@/components/affiliate/DashboardAffiliate";
-// import SalesChart from "@/components/affiliate/SalesChart";
+// import DemographicCard from "../../../components/ecommerce/DemographicCard";
+// import Performance from "../../../components/affiliate/Performance";
+import DashboardAffiliate from "../../../components/affiliate/DashboardAffiliate";
+// import SalesChart from "../../../components/affiliate/SalesChart";
 
 export const metadata: Metadata = {
   title:
-    "KKTOP Dashboard | Affiliate list",
+    "Live SentinelDashboard | Affiliate list",
   description: "This is the affiliate list data",
 };
 

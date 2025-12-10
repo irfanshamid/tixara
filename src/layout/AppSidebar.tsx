@@ -1,53 +1,53 @@
 "use client";
-import React, { useEffect, useRef, useState,useCallback, ElementType } from "react";
+import React, { useEffect, useRef, useState,useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
-  BoxCubeIcon,
-  ChatIcon,
+  BoxesIcon,
+  Globe2Icon,
   CheckCircleIcon,
   ChevronDownIcon,
-  DollarLineIcon,
+  DollarSignIcon,
   GridIcon,
-  HorizontaLDots,
+  EllipsisVertical,
   InfoIcon,
-  TimeIcon,
+  TimerOff,
   UserCircleIcon,
-} from "../icons/index";
+} from "lucide-react";
 // import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
-  icon: ElementType;
+  icon: React.ReactNode;
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
 const navItems: NavItem[] = [
   {
-    icon: DollarLineIcon,
+    icon: <DollarSignIcon />,
     name: "Sales Performances",
     path: "/admin",
   },
   {
-    icon: GridIcon,
+    icon: <GridIcon />,
     name: "Affiliate Performances",
     path: "/admin/affiliate",
   },
   {
-    icon: TimeIcon,
+    icon: <TimerOff />,
     name: "Live Record",
     path: "/admin/live",
   },
   {
-    icon: BoxCubeIcon,
+    icon: <BoxesIcon />,
     name: "Product Analitycs",
     path: "/admin/products",
   },
   {
-    icon: ChatIcon,
+    icon: <Globe2Icon />,
     name: "AI Asistants",
     path: "/admin/ai",
   },
@@ -55,17 +55,17 @@ const navItems: NavItem[] = [
 
 const othersItems: NavItem[] = [
   {
-    icon: CheckCircleIcon,
+    icon: <CheckCircleIcon />,
     name: "Token Monitoring",
     path: "/admin/token",
   },
   {
-    icon: UserCircleIcon,
+    icon: <UserCircleIcon />,
     name: "User Administrator",
     path: "/admin/users",
   },
   {
-    icon: InfoIcon,
+    icon: <InfoIcon />,
     name: "General Info",
     path: "/admin/general-info",
   },
@@ -102,7 +102,7 @@ const AppSidebar: React.FC = () => {
                     : "menu-item-icon-inactive"
                 }`}
               >
-                <nav.icon />
+                {nav.icon}
               </span>
               {(isExpanded || isHovered || isMobileOpen) && (
                 <span className={`menu-item-text`}>{nav.name}</span>
@@ -133,7 +133,7 @@ const AppSidebar: React.FC = () => {
                       : "menu-item-icon-inactive"
                   }`}
                 >
-                  <nav.icon/>
+                  {nav.icon}
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
                   <span className={`menu-item-text`}>{nav.name}</span>
@@ -304,7 +304,7 @@ const AppSidebar: React.FC = () => {
                   height={32}
                 />
               </>
-              <div className="font-bold text-xl">KKTOP</div>
+              <div className="font-bold text-xl">Live Sentinel</div>
             </div>
           ) : (
             <Image
@@ -330,7 +330,7 @@ const AppSidebar: React.FC = () => {
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Menu"
                 ) : (
-                  <HorizontaLDots />
+                  <EllipsisVertical />
                 )}
               </h2>
               {renderMenuItems(navItems, "main")}
@@ -347,7 +347,7 @@ const AppSidebar: React.FC = () => {
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Others"
                 ) : (
-                  <HorizontaLDots />
+                  <EllipsisVertical />
                 )}
               </h2>
               {renderMenuItems(othersItems, "others")}

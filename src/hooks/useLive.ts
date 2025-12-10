@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ProductList } from "@/types/affiliate";
+import { ProductList } from "./../types/affiliate";
 
 export function useLive(
     roomId: string, 
