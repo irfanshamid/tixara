@@ -1,4 +1,4 @@
-import { ProductList, MoneyValue } from "@/types/affiliate";
+import { ProductList, MoneyValue } from "../types/affiliate";
 
 const defaultState: ProductList = {
   id: "",
