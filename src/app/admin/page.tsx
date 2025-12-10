@@ -1,11 +1,12 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
+import DashboardLive from "@/components/ecommerce/DashboardLive";
 
 export const metadata: Metadata = {
   title: "KKTOP Dashboard",
 };
 
 export default function Ecommerce() {
-  return <div>hehe</div>;
+  return <DashboardLive />;
 }
