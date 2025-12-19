@@ -28,7 +28,7 @@ export default function AdminLayout({
     if (!token) {
     // if (!token || isTokenExpired(token)) {
       localStorage.removeItem("token");
-      router.replace("/auth/signin");
+      // router.replace("/auth/signin");
       return;
     }
   }, [router]);
