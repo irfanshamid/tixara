@@ -41,7 +41,7 @@ export async function GET() {
 
     // ===================== API CALL =====================
     const response = await fetch(
-      "https://seller-id.tokopedia.com/api/v2/insights/seller/live/performance/creator/list?locale=en&language=en&oec_seller_id=7494930113907558878&seller_id=7494930113907558878&aid=4068&app_name=i18n_ecom_shop&device_platform=web&cookie_enabled=true&browser_online=true&timezone_name=Asia%2FJakarta&use_content_type_definition=1",
+      "https://seller-id.tokopedia.com/api/v2/insights/seller/live/performance/creator/list?locale=en&language=en&oec_seller_id=7496268914264934646&seller_id=7496268914264934646&aid=4068&app_name=i18n_ecom_shop&device_platform=web&cookie_enabled=true&browser_online=true&timezone_name=Asia%2FJakarta&use_content_type_definition=1",
       {
         method: "POST",
         headers: {
